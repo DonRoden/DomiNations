@@ -20,6 +20,15 @@ public class Deck implements Serializable{
 		deck = deckShuffled;
 	}
 	
+	public Domino getDomino(int nbDomino) {
+		for (Domino d : deck) {
+			if (d.getNumber() == nbDomino) {
+				return d;
+			}
+		}
+		return null;
+	}
+	
 	public boolean hasNext() {
 		return iterator < deck.size();
 	}
