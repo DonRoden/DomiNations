@@ -1,7 +1,7 @@
 package model;
 import java.io.Serializable;
 
-public class Domino implements Serializable{
+public class Domino implements Comparable<Domino>, Serializable{
 	private int nbDomino;
 	private String type1, type2;
 	private int nbCrown;
@@ -31,5 +31,15 @@ public class Domino implements Serializable{
 	
 	public int getCrown() {
 		return nbCrown;
+	}
+
+	@Override
+	public int compareTo(Domino arg0) {
+		if (this.getNumber() < arg0.getNumber())
+			return -1;
+		else if (this.getNumber() > arg0.getNumber())
+			return 1;
+		else
+			return 0;
 	}
 }

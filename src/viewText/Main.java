@@ -5,18 +5,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.Random;
-
-import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
+import java.util.Scanner;
 import model.Deck;
-import model.Domino;
 import model.Player;
+import model.Domino;
 
-public class Main extends Application{
+public class Main {
 	static Deck deck = new Deck();
 	static Player[] player;
 	static Random ran = new Random();
@@ -38,23 +34,47 @@ public class Main extends Application{
         catch (ClassNotFoundException e) {
         	e.printStackTrace();
         }
+             
         
-        deck.shuffle(48);
-        
-        while (deck.hasNext()) {
-        	System.out.println(deck.nextDomino().getNumber());
-        }
-        
-//        Application.launch(Main.class, args);       
     }
-    
 
-    public void start(Stage primaryStage) {
-    	Group root = new Group();
-        Scene scene = new Scene(root, 500, 500, Color.WHITE);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-        }
+    
+    public static void setupGame() {
+
+		
+		
+		 /* 
+		 * piocher dominos
+		 * random ordre pour jouer
+		 * choisir domino /joueur
+		 * pioche dominos
+		 */
+	}
+    public static int nbPlayer() {
+    	Scanner scan = new Scanner(System.in);
+		System.out.println("Combien de personnes veut jouer ?");
+		int nbPlayer = scan.nextInt();
+		scan.nextLine();
+		if(nbPlayer<=4) {
+			return nbPlayer;
+		}
+		else {
+			System.out.println("Trop de joueurs !");
+			return nbPlayer();
+		}
+    }
+    public static String colorchoice(int i){
+    	System.out.println("Joueur"+" " +(i+1)+" "+"quelle couleur voulez-vous ? (Rouge, Vert, Jaune, Bleu)");
+    	Scanner scan = new Scanner(System.in);
+		String color = scan.nextLine();
+		return color;
+    }
+    public static void showdominos(ArrayList<Domino> dominos) {
+    	for(Domino d : dominos) {
+    		System.out.print(d.getNumber());
+    		System.out.println(" le premier territoire est "+ d.getType1()+" le deuxieme territoire est "+d.getType2()+" avec "+d.getCrown()+" couronne sur le premier territoire");
+    	}
+    }
     
 //    public void game() {
 //    	//Combien de joueur ?
