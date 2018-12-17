@@ -17,6 +17,8 @@ public class Model {
 	static Random ran = new Random();
 	
 	public static void main(String[] args) {
+		
+		
     	ObjectInputStream ois;
     	
         try {
@@ -38,6 +40,10 @@ public class Model {
 	}
 	
 	public static void setupGame() {
+		int[] order;
+		int[] chosenDomino;
+		Random random = new Random();
+		
 		/* on choisit le nb de joueur et leurs couleur*/
 		int nbPlayer = viewText.Main.nbPlayer();
 		player = new Player[nbPlayer];
@@ -51,18 +57,64 @@ public class Model {
 					}
 		}
 		/*on mélange le deck et on pioche les dominos et on donne un ordre de passage*/
-		deck.shuffle(nbPlayer*12);
-		
-		ArrayList<Domino> onboarddominos =new ArrayList<>();
-		for(int i=0; i<nbPlayer;i++) {
-			onboarddominos.add(deck.nextDomino());
+		if(nbPlayer==2) {
+			deck.shuffle(nbPlayer*24);
 		}
-		onboarddominos.sort(Comparator.comparing(Domino::getNumber));
-		viewText.Main.showdominos(onboarddominos);
+		else {
+			deck.shuffle(nbPlayer*12);
+		}
 		
-		Random random = new Random();
-		int order = random.nextInt(nbPlayer)+1;
-		Player chosenplayer =player[order];
+		ArrayList<Domino> onBoardDominos =new ArrayList<>();
+		if(nbPlayer==2) {
+			for(int i=0; i<4;i++) {
+				onBoardDominos.add(deck.nextDomino());
+			}
+		}
+		else{
+			for(int i=0; i<nbPlayer;i++) {
+			onBoardDominos.add(deck.nextDomino());
+			}
+		}
+		onBoardDominos.sort(Comparator.comparing(Domino::getNumber));
+		viewText.Main.showdominos(onBoardDominos);
+		
+		
+		if(nbPlayer==2) {
+			order = new int [4];
+			chosenDomino = new int[4];
+		}
+		else{
+			order = new int [nbPlayer];
+			chosenDomino = new int[nbPlayer];
+		}
+		ArrayList<Integer> list =new ArrayList<>();
+		if(nbPlayer==2) {
+			list.add(1);
+			list.add(1);
+			list.add(2);
+			list.add(2);
+		}
+		else  if(nbPlayer==3){
+			list.add(1);
+			list.add(2);
+			list.add(3);
+		}
+		else {
+			list.add(1);
+			list.add(2);
+			list.add(3);
+			list.add(4);
+		}
+
+		for(int i=0;i<order.length;i++) {
+			order[i]=list.remove(random.nextInt(list.size()));
+		}
+		
+		
+		for(int i:order) {
+				viewText.Main.dominoChoice(i);
+		}
+		
 		
 		 /* piocher dominos
 		 * random ordre pour jouer
