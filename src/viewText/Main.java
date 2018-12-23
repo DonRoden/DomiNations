@@ -52,7 +52,7 @@ public class Main {
 	}
     public static int nbPlayer() {
     	Scanner scan = new Scanner(System.in);
-		System.out.println("Combien de personnes veut jouer ?");
+		System.out.println("Combien de personnes veulent jouer ?");
 		int nbPlayer = scan.nextInt();
 		scan.nextLine();
 		if(nbPlayer<=4) {
@@ -74,6 +74,13 @@ public class Main {
     		System.out.print(d.getNumber());
     		System.out.println(" le premier territoire est "+ d.getType1()+" le deuxieme territoire est "+d.getType2()+" avec "+d.getCrown()+" couronne sur le premier territoire");
     	}
+    }
+    public static int dominoChoice(int i) {
+    	System.out.println("Joueur"+" "+(i)+" quelle domino choisissez vous ? (donner son numéro)");
+    	Scanner scan = new Scanner(System.in);
+    	int d=scan.nextInt();
+    	scan.nextLine();
+    	return d;
     }
     
 //    public void game() {
