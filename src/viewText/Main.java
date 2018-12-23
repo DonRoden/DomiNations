@@ -15,7 +15,6 @@ public class Main {
     public static void main(String[] args) {
     	Model.importDeck();
     	setupGame();
-    	System.out.println(Model.player[0].getColor());
     }
 
     public static void setupGame() {
