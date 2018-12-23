@@ -1,40 +1,16 @@
 package model;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Model {
 	static Deck deck = new Deck();
-	static Player[] player;
 	static Random ran = new Random();
-	
 	public static void main(String[] args) {
-    	ObjectInputStream ois;
-    	
-        try {
-        	ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(new File("dominos"))));
-        	deck = (Deck)ois.readObject();
-        	ois.close();
-        }
-        catch (FileNotFoundException e) {
-        	e.printStackTrace();
-        }
-        catch (IOException e) {
-        	e.printStackTrace();
-        }
-        catch (ClassNotFoundException e) {
-        	e.printStackTrace();
-        }
-		setupGame();
-		System.out.println();
+		importDeck();
 	}
 	
 	public static void setupGame() {
@@ -89,5 +65,30 @@ public class Model {
 	
 	public static void turnRight() {
 		
+	}
+	
+	public static void importDeck() {
+		Scanner sc = null;
+		try {
+		    sc = new Scanner(new File("dominos.csv")); 
+		} catch (FileNotFoundException e) {
+		    System.out.println("Fichier non trouvé");
+		}
+		
+		try {
+			sc.nextLine();
+			while (sc.hasNext()) {
+				String line = sc.nextLine();
+			    String[] elements = line.split(",");
+			    deck.add(Integer.parseInt(elements[0]), 
+			    		Integer.parseInt(elements[2]), 
+			    		elements[1], 
+			    		elements[3], 
+			    		Integer.parseInt(elements[4]));			    
+			}
+		}
+		finally {
+			sc.close();
+		}
 	}
 }

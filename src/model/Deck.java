@@ -43,7 +43,7 @@ public class Deck implements Serializable{
 		}
 	}
 	
-	public void add(int nbCrown, String type1, String type2, int nb) {
-		deck.add(new Domino(nbCrown, type1, type2, nb));
+	public void add(int nbCrown1, int nbCrown2, String type1, String type2, int nb) {
+		deck.add(new Domino(nbCrown1, nbCrown2, type1, type2, nb));
 	}
 }
