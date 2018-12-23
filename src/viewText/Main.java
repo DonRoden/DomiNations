@@ -1,105 +1,112 @@
 package viewText;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 import model.Deck;
 import model.Player;
 import model.Domino;
+import model.Model;
 
 public class Main {
-	static Deck deck = new Deck();
-	static Player[] player;
 	static Random ran = new Random();
+	static Scanner scan = new Scanner(System.in);
 	
     public static void main(String[] args) {
-    	ObjectInputStream ois;
-    	
-        try {
-        	ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(new File("dominos"))));
-        	deck = (Deck)ois.readObject();
-        	ois.close();
-        }
-        catch (FileNotFoundException e) {
-        	e.printStackTrace();
-        }
-        catch (IOException e) {
-        	e.printStackTrace();
-        }
-        catch (ClassNotFoundException e) {
-        	e.printStackTrace();
-        }
-             
-        
+    	Model.importDeck();
+    	setupGame();
+    	System.out.println(Model.player[0].getColor());
     }
 
-    
     public static void setupGame() {
-
-		
-		
-		 /* 
-		 * piocher dominos
-		 * random ordre pour jouer
-		 * choisir domino /joueur
-		 * pioche dominos
-		 */
+    	/*
+    	 * Le setupGame est très simple, chaque action fais une ligne, 
+    	 * sauf lors d'une boucle pour les 4 joueurs (ex: couleur)
+    	 * 
+    	 * De plus certaines fonctions ont besoin de donnees de l'utilisateur,
+    	 * dans ce cas on les definit ici (ex; choisir une couleur ou un nombre de joueur)
+    	 * Les fonctions qui n'ont pas besoin de l'entree clavier sont definies dans Model
+    	 * (ex: piocher, melanger)
+    	 */
+    	
+    	// on choisit le nb de joueurs
+    	nbPlayer();
+    	
+    	//On choisit leur couleur
+    	for (int i = 0; i < Model.player.length; i++) {
+    		colorChoice(i);
+    	}
+    	
+    	//On mélange le deck
+    	Model.shuffleDeck();
+    	
+    	//On pioche
+    	Model.draw();
+    	
+    	//On affiche la pioche
+    	showDominos(Model.onBoardDominos);
+    	
+    	//On definit un ordre aleatoire pour le premier tour
+    	Model.setRandomOrder();
+    	
+    	//Chaque joueur choisit un domino
+    	for (int i : Model.order) {
+    		dominoChoice(i);
+    	}
+    	
 	}
-    public static int nbPlayer() {
-    	Scanner scan = new Scanner(System.in);
+    
+    public static void nbPlayer() {
+    	//On demande a l'utilisateur le nombre de joueur
 		System.out.println("Combien de personnes veulent jouer ?");
 		int nbPlayer = scan.nextInt();
 		scan.nextLine();
+		
 		if(nbPlayer<=4) {
-			return nbPlayer;
+			//Si le nombre de joueurs est adéquat, on définit le nombre de joueur dans Model
+			Model.setNbPlayer(nbPlayer);
 		}
 		else {
+			//Sinon il suffit de relancer la fonction pour redemander le nombre
 			System.out.println("Trop de joueurs !");
-			return nbPlayer();
+			nbPlayer();
 		}
     }
-    public static String colorchoice(int i){
+    
+    public static void colorChoice(int i){
     	System.out.println("Joueur"+" " +(i+1)+" "+"quelle couleur voulez-vous ? (Rouge, Vert, Jaune, Bleu)");
-    	Scanner scan = new Scanner(System.in);
 		String color = scan.nextLine();
-		return color;
+		Model.createPlayer(i, color);
     }
-    public static void showdominos(ArrayList<Domino> dominos) {
+    
+    public static void showDominos(ArrayList<Domino> dominos) {
     	for(Domino d : dominos) {
-    		System.out.print(d.getNumber());
-    		System.out.println(" le premier territoire est "+ d.getType1()+" le deuxieme territoire est "+d.getType2()+" avec "+d.getCrown()+" couronne sur le premier territoire");
+    		System.out.print(d.getNumber()+ " : ");
+    		System.out.println("Le premier territoire est "+ d.getHalf(0).getType() +" avec "+ d.getHalf(0).getCrown() +" couronnes\n"
+    				+ "Le deuxieme territoire est "+ d.getHalf(1).getType() +" avec "+ d.getHalf(1).getCrown() +" couronnes\n");
     	}
     }
+    
     public static int dominoChoice(int i) {
-    	System.out.println("Joueur"+" "+(i)+" quelle domino choisissez vous ? (donner son numéro)");
-    	Scanner scan = new Scanner(System.in);
+    	System.out.println("Joueur "+ (i+1) +" quelle domino choisissez vous ? (donner son numéro)");
     	int d=scan.nextInt();
     	scan.nextLine();
     	return d;
     }
     
-//    public void game() {
-//    	//Combien de joueur ?
-//    	int nbPlayer = 2;
-//    	player = new Player[nbPlayer];
-//    	for (int i = 0; i < nbPlayer; i++) {
-//    		//Joueur i, quelle couleur ?
-//    		player[i] = new Player(nbKing, color);
-//    		player[i].setColor(color);
-//    		player[i].setKing();
-//    	}
-//    	
-//    	int playing = ran.nextInt(nbPlayer);
-//    	Domino[] pile1 = new Domino[nbPlayer];
-//    	for (Domino i : pile1) {
-//    		i = deck.nextDomino();
-//    	}
-//    	
-//    	//Joueur playing choisi
-//    }
+    
+    
+    
+	public static void play() {
+		/*
+		 * pour chaque joueur
+		 *		 placer domino
+		*		 choisir dominos
+		*
+		*if (c'est fini)
+		*		compter les points
+		*		dire qui c'est qu'a gagnï¿½
+		 * piocher donimos
+		 */
+	}	
 }

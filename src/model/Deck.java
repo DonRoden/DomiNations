@@ -1,9 +1,9 @@
 package model;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Deck implements Serializable{
+public class Deck {
 	private ArrayList<Domino> deck = new ArrayList<>();
 	private int iterator = 0;
 	

@@ -4,10 +4,6 @@ public class Domino implements Comparable<Domino>{
 	private int nbDomino;
 	private HalfDomino[] half = new HalfDomino[2];
 	
-	public Domino(int nbDomino) {
-		this.nbDomino = nbDomino;
-	}
-	
 	public Domino(int nbCrown1, int nbCrown2, String type1, String type2, int nbDomino) {
 		this.nbDomino = nbDomino;
 		half[0] = new HalfDomino(nbCrown1, type1);
@@ -18,17 +14,9 @@ public class Domino implements Comparable<Domino>{
 		return nbDomino;
 	}
 	
-//	public String getType1() {
-//		return type1;
-//	}
-//	
-//	public String getType2() {
-//		return type2;
-//	}
-//	
-//	public int getCrown() {
-//		return nbCrown;
-//	}
+	public HalfDomino getHalf(int i) {
+		return half[i];
+	}
 
 	@Override
 	public int compareTo(Domino arg0) {

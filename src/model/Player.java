@@ -1,20 +1,23 @@
-//package model;
-//
-//public class Player {
-//	private String color;
-//	private int nbKing;
-//	private int[][] board;
-//	private Deck deck;
-//	
-//
-//	public Player(int nbKing, String color, int sizeBoard, Deck deck) {
-//		this.nbKing = nbKing;
-//		this.color = color;
-//		this.board = new int[sizeBoard*2-1][sizeBoard*2-1];
-//		board[sizeBoard-1][sizeBoard-1] = 0;
-//		this.deck = deck;
-//	}
-//	
+package model;
+
+public class Player {
+	private String color;
+	private int nbKing;
+	private int[][] board;
+
+	public Player(int nbKing, String color, int sizeBoard) {
+		this.nbKing = nbKing;
+		this.color = color;
+		this.board = new int[sizeBoard*2-1][sizeBoard*2-1];
+		board[sizeBoard-1][sizeBoard-1] = 0;
+	}
+	
+	public String getColor() {
+		return color;
+	}
+	
+	
+	
 //public boolean isPlacable(int x1, int y1, int x2, int y2) {
 //		if (board[x1][y1]==0 && board[x2][y2]==0) { // 2 cases vides
 //			if (x1==x2) { // domino à la verticale 
@@ -90,18 +93,18 @@
 //			return false;
 //		}
 //	}
-////	
-////	public void placeDomino(int x1, int y1, int x2, int y2, Domino domino) {
-////		
-////	}
-////	
-////	public int[][] listPlacable() {
-////		
-////	}
-////	
-////	public int points() {
-////		
-////	}
+//	
+//	public void placeDomino(int x1, int y1, int x2, int y2, Domino domino) {
+//		
+//	}
+//	
+//	public int[][] listPlacable() {
+//		
+//	}
+//	
+//	public int points() {
+//		
+//	}
 //	
 //	public String getTypeCase(int nbDomino) {
 //		if (nbDomino < 0) {
@@ -126,4 +129,4 @@
 //			return 0;
 //		}
 //	}
-//}
+}
