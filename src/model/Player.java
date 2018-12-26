@@ -11,10 +11,8 @@ public class Player {
 	private HalfDomino chateau = new HalfDomino(0, "Castle");
 	private HalfDomino vide = new HalfDomino(0, "Void");
 	private HalfDomino forbidden = new HalfDomino(0, "X");
-	List<HalfDomino> zone = new ArrayList<HalfDomino>();
+	private List<HalfDomino> zone = new ArrayList<HalfDomino>();
 	private int totalScore = 0;
-	private boolean centered = false;
-	private boolean full = false;
 	/*
 	 * Chaque case stocke maintenant un demi domino donc les actions a effectuer sont plus claires
 	 * Chaque demi-domino a un type et un nombre de couronnes
@@ -63,7 +61,8 @@ public class Player {
 		p.placeDomino(4, 3, 3, 3,new Domino(0,0,"Champs", "Champs", 3));
 		p.placeDomino(3, 6, 4, 6,new Domino(1,0,"Mont", "Champs", 4));
 		p.placeDomino(3, 7, 4, 7,new Domino(1,0,"Mont", "Champs", 5));
-		p.placeDomino(6, 5, 7, 5,new Domino(1,0,"Champs", "Mont", 1));
+		p.placeDomino(6, 5, 7, 5,new Domino(1,0,"Champs", "Mont", 6));
+//		p.placeDomino(5, 4, 5, 6,new Domino(0,0,"Champs", "Champs", 7));
 		
 //		Player p = new Player(1, "a", 7);
 //		
@@ -73,6 +72,9 @@ public class Player {
 		
 		p.printBoard();
 		p.scoreBoard();
+		Domino test = new Domino(0,0,"Mine", "Mine", 7);
+		p.listPlacable(test);
+		
 	}
 
 	public void printBoard() {
@@ -89,24 +91,22 @@ public class Player {
 		HalfDomino case2 = domino.getHalf(1);
 		// 2 cases vides
 		if (board[x1][y1] == vide && board[x2][y2] == vide) {
-			// A  cote du chateau ou a  cote d'un meme type
-			if (   board[x1-1][y1] == chateau
-				|| board[x1+1][y1] == chateau
-				|| board[x2-1][y2] == chateau
-				|| board[x2+1][y2] == chateau
-				|| board[x1][y1+1] == chateau
-				|| board[x2][y2-1] == chateau
-				|| board[x1][y1-1] == chateau
-				|| board[x2][y2+1] == chateau
-				|| case1.getType() == board[x1-1][y1].getType()
-				|| case1.getType() == board[x1+1][y1].getType()
-				|| case2.getType() == board[x2-1][y2].getType()
-				|| case2.getType() == board[x2+1][y2].getType()
-				|| case1.getType() == board[x1][y1+1].getType()
-				|| case1.getType() == board[x1][y1-1].getType()
-				|| case2.getType() == board[x2][y2+1].getType()
-				|| case2.getType() == board[x2][y2-1].getType() ) {
-				return true;
+			// rectangle
+			if (isDomino(x1,y1,x2,y2)) {
+				// A cote du chateau ou a cote d'un meme type
+				if (   board[x1-1][y1] == chateau || board[x1+1][y1] == chateau
+					|| board[x2-1][y2] == chateau || board[x2+1][y2] == chateau
+					|| board[x1][y1+1] == chateau || board[x2][y2-1] == chateau
+					|| board[x1][y1-1] == chateau || board[x2][y2+1] == chateau
+					|| case1.getType() == board[x1-1][y1].getType() || case1.getType() == board[x1+1][y1].getType()
+					|| case2.getType() == board[x2-1][y2].getType() || case2.getType() == board[x2+1][y2].getType()
+					|| case1.getType() == board[x1][y1+1].getType() || case1.getType() == board[x1][y1-1].getType()
+					|| case2.getType() == board[x2][y2+1].getType() || case2.getType() == board[x2][y2-1].getType() ) {
+					return true;
+				}
+				else {
+					return false;
+				}
 			}
 			else {
 				return false;
@@ -153,9 +153,59 @@ public class Player {
 	}
 
 
-//	public int[][] listPlacable() {
-//
-//	}
+	public List<int[]> listPlacable(Domino domino) {
+		List<int[]> placables = new ArrayList<int[]>();
+		for (int i = 1; i < size*2-1; i++) {
+			for (int j = 1; j < size*2-1; j++) {
+				if (isPlacable(j,i,j+1,i,domino)) {
+					int[] position = {j,i,j+1,i};
+					placables.add(position);
+				}
+				if (isPlacable(j,i,j-1,i,domino)) {
+					int[] position = {j,i,j-1,i};
+					placables.add(position);
+				}
+				if (isPlacable(j,i,j,i-1,domino)) {
+					int[] position = {j,i,j,i-1};
+					placables.add(position);
+				}
+				if (isPlacable(j,i,j,i+1,domino)) {
+					int[] position = {j,i,j,i+1};
+					placables.add(position);
+				}
+			}
+		}
+		for (int i = 0; i < placables.size(); i++) {
+			System.out.print("[ ");
+			for (int j = 0; j < 4; j++) {
+				System.out.print(placables.get(i)[j]+" ");
+			}
+			System.out.print("],");
+		}
+		return placables;
+	}
+	
+	public boolean isDomino(int x1, int y1, int x2, int y2) {
+		if (x2==x1-1 || x2==x1+1) {
+			if (y2==y1 || y2==y1) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		if (y2==y1-1 || y2==y1+1) {
+			if (x2==x1 || x2==x1) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
 	
 	public void findZone(int x, int y) {
 
@@ -217,17 +267,20 @@ public class Player {
 	public boolean isCentered() {
 		if (board[size+size/2][size] != forbidden && board[size-size/2][size] != forbidden && 
 				board[size][size+size/2] != forbidden && board[size][size-size/2] != forbidden) {
-			centered = true;
+			return true;
 		}
-		return centered;
+		else {
+			return false;
+		}
 	}
 	
 	public boolean isFull() {
-		full = true;
+		boolean full = true;
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
 				if (board[j][i] == vide) {
 					full = false;
+					break;
 				}
 			}
 		}
