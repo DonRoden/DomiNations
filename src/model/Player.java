@@ -223,10 +223,11 @@ public class Player {
 	}
 	
 	public boolean isFull() {
+		full = true;
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
-				if (this.board[j][i] != vide) {
-					full = true;
+				if (board[j][i] == vide) {
+					full = false;
 				}
 			}
 		}
