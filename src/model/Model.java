@@ -15,7 +15,8 @@ public class Model {
 	public static int kingPerPlayer = 1;
 	public static ArrayList<Domino> onBoardDominos = new ArrayList<>();
 	public static int[] order;
-	public static int[] chosenDomino;
+	public static int[] newOrder;
+	public static Domino[] chosenDomino;
 	
 	static Random ran = new Random();
 	
@@ -50,7 +51,8 @@ public class Model {
 		}
 		nbKings = nbPlayer*kingPerPlayer;
 		order = new int[nbKings];
-		chosenDomino = new int[nbKings];
+		newOrder = new int[nbKings];
+		chosenDomino = new Domino[nbKings];
 	}
 	
 	public static void createPlayer(int i, String color) {
@@ -62,6 +64,7 @@ public class Model {
 	}
 	
 	public static void draw() {
+		onBoardDominos = new ArrayList<>(); 
 		for(int i = 0; i < nbKings; i++) {
 			onBoardDominos.add(deck.nextDomino());
 		}
@@ -116,8 +119,6 @@ public class Model {
 			order[i]=list.remove(ran.nextInt(list.size()));
 		}
 	}
-	
-
 
 	public static void importDeck() {
 		Scanner sc = null;

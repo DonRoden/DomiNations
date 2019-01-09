@@ -3,10 +3,8 @@ package viewText;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-import model.Deck;
-import model.Player;
-import model.Domino;
-import model.Model;
+import model.*;
+
 
 public class Main {
 	static Random ran = new Random();

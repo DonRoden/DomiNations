@@ -75,14 +75,14 @@ public class Player {
 				|| board[x2][y2-1] == chateau
 				|| board[x1][y1-1] == chateau
 				|| board[x2][y2+1] == chateau
-				|| case1.getType() == board[x1-1][y1].getType()
-				|| case1.getType() == board[x1+1][y1].getType()
-				|| case2.getType() == board[x2-1][y2].getType()
-				|| case2.getType() == board[x2+1][y2].getType()
-				|| case1.getType() == board[x1][y1+1].getType()
-				|| case1.getType() == board[x1][y1-1].getType()
-				|| case2.getType() == board[x2][y2+1].getType()
-				|| case2.getType() == board[x2][y2-1].getType() ) {
+				|| case1.getType().equals(board[x1-1][y1].getType())
+				|| case1.getType().equals(board[x1+1][y1].getType())
+				|| case2.getType().equals(board[x2-1][y2].getType())
+				|| case2.getType().equals(board[x2+1][y2].getType())
+				|| case1.getType().equals(board[x1][y1+1].getType())
+				|| case1.getType().equals(board[x1][y1-1].getType())
+				|| case2.getType().equals(board[x2][y2+1].getType())
+				|| case2.getType().equals(board[x2][y2-1].getType())) {
 				return true;
 			}
 			else {
@@ -96,6 +96,7 @@ public class Player {
 
 	public void placeDomino(int x1, int y1, int x2, int y2, Domino domino) {
 		if (isPlacable(x1,y1,x2,y2,domino)) {
+			System.out.println("Done");
 			board[x1][y1] = domino.getHalf(0);
 			board[x2][y2] = domino.getHalf(1);
 			if (x1==2 || x2==2) {
@@ -155,7 +156,7 @@ public class Player {
 			if (x1==7 || x2==7) {
 				for (int i=0; i < 11;i++) {
 					board[1][i] = forbidden;
-					board[2][i]=forbidden;
+					board[2][i] = forbidden;
 				}
 			}
 			if (y1==3 || y2==3) {
@@ -194,6 +195,10 @@ public class Player {
 		else {
 			System.out.println("Vous ne pouvez pas placer cette piece ici");
 		}
+	}
+	
+	public HalfDomino[][] getBoard() {
+		return board;
 	}
 
 
