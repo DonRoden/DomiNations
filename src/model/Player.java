@@ -130,6 +130,7 @@ public class Player {
 			System.out.println("Vous ne pouvez pas placer cette piece ici");
 		}
 	}
+	
 	public void fillBoard(int x1, int y1, int x2, int y2) {
 		for (int k=1; k < size;k++) {
 			if (x1==k || x2==k) {
@@ -154,7 +155,6 @@ public class Player {
 			}
 		}
 	}
-
 
 	public List<int[]> listPlacable(Domino domino) {
 		List<int[]> placables = new ArrayList<int[]>();
