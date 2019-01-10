@@ -1,9 +1,9 @@
 package model;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Deck implements Serializable{
+public class Deck {
 	private ArrayList<Domino> deck = new ArrayList<>();
 	private int iterator = 0;
 	
@@ -43,7 +43,7 @@ public class Deck implements Serializable{
 		}
 	}
 	
-	public void add(int nbCrown1,int nbCrown2, String type1, String type2, int nb) {
-		deck.add(new Domino(nbCrown1,nbCrown2, type1, type2, nb));
+	public void add(int nbCrown1, int nbCrown2, String type1, String type2, int nb) {
+		deck.add(new Domino(nbCrown1, nbCrown2, type1, type2, nb));
 	}
 }

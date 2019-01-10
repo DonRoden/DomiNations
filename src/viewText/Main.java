@@ -6,10 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import model.Deck;
-import model.Player;
-import model.Domino;
-import model.Model;
+import model.*;
+
 
 public class Main {
 	static Random ran = new Random();
@@ -17,11 +15,13 @@ public class Main {
 	static List<Integer> coord=new ArrayList<>();
 	static Player lagia = new Player(1, "a", 5);
 	static int [] newOrder= new int[4];
+
 	
     public static void main(String[] args) {
     	Model.importDeck();
     	setupGame();
     	play();
+
     }
 
     public static void setupGame() {
@@ -56,7 +56,7 @@ public class Main {
     	Model.setRandomOrder();
     	
     	//Chaque joueur choisit un domino
-    	
+
     	for (int i : Model.order) {
     		int dc = dominoChoice(i);
     		for(int k=0; k< Model.order.length; k++) {
@@ -64,8 +64,6 @@ public class Main {
     				newOrder[k]=i;
     		}
     	}
-    	
-    	
 	}
     
     public static void nbPlayer() {
@@ -89,6 +87,7 @@ public class Main {
     	System.out.println("Joueur"+" " +(i+1)+" "+"quelle couleur voulez-vous ? (Rouge, Vert, Jaune, Bleu)");
 		String color = scan.nextLine();
 		Model.createPlayer(i, color);
+
     }
     
     public static void showDomino(Domino d) {
@@ -188,6 +187,7 @@ public class Main {
 
 			
 		}
+
 		/*
 		 * pour chaque joueur
 		 *		 placer domino

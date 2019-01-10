@@ -22,7 +22,7 @@ public class Player {
 	 * 
 	 * Au lieu d'un 0 lorsque le plateau n'est pas rempli, il y a un domino de type vide
 	 */
-	
+
 //  Les donnees d'avant qui ont ete changees
 //	private int[][] board = new int[11][11];
 //	public int chateau=49;
@@ -33,14 +33,14 @@ public class Player {
 		this.color = color;
 		this.size = size;
 		board = new HalfDomino[size*2+1][size*2+1];
-		
+
 		// Je remplis mon board de cases vides
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
 				board[i][j] = vide;
 			}
 		}
-		
+
 		// Puis je mets le chateau et les cases interdites sur les bords
 		board[size][size] = chateau;
 		for (int i = 0; i < size*2+1; i++) {
@@ -51,6 +51,7 @@ public class Player {
 			board[i][0] = forbidden;
 			board[i][size*2] = forbidden;
 		}
+
 	}
 	
 	public static void main(String[] args) {
@@ -127,6 +128,7 @@ public class Player {
 			System.out.println("Vous ne pouvez pas placer cette piece ici");
 		}
 	}
+
 	public void fillBoard(int x1, int y1, int x2, int y2) {
 		for (int k=1; k < size;k++) {
 			if (x1==k || x2==k) {
@@ -151,8 +153,6 @@ public class Player {
 			}
 		}
 	}
-
-
 	public List<int[]> listPlacable(Domino domino) {
 		List<int[]> placables = new ArrayList<int[]>();
 		for (int i = 1; i < size*2-1; i++) {
@@ -206,7 +206,7 @@ public class Player {
 			return false;
 		}
 	}
-	
+
 	public void findZone(int x, int y) {
 
 		if (!(board[x][y].isScored())) {
@@ -266,6 +266,7 @@ public class Player {
 	
 	public boolean isCentered() {
 		if (board[size+size/2][size] != forbidden && board[size-size/2][size] != forbidden && 
+
 				board[size][size+size/2] != forbidden && board[size][size-size/2] != forbidden) {
 			return true;
 		}
@@ -273,7 +274,6 @@ public class Player {
 			return false;
 		}
 	}
-	
 	public boolean isFull() {
 		boolean full = true;
 		for (int i = 0; i < board.length; i++) {
@@ -286,6 +286,4 @@ public class Player {
 		}
 		return full;
 	}
-	
-	
 }
