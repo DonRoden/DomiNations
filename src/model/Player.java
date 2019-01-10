@@ -1,129 +1,291 @@
 package model;
 
-public class Player {
-	private String color;
-	private int nbKing;
-	private int[][] board;
-	private Deck deck;
-	
+import java.util.ArrayList;
+import java.util.List;
 
-	public Player(int nbKing, String color, int sizeBoard, Deck deck) {
+public class Player {
+	public String color;
+	private int nbKing;
+	private int size;
+	private HalfDomino[][] board;
+	private HalfDomino chateau = new HalfDomino(0, "Castle");
+	private HalfDomino vide = new HalfDomino(0, ".");
+	private HalfDomino forbidden = new HalfDomino(0, "X");
+	private List<HalfDomino> zone = new ArrayList<HalfDomino>();
+	private int totalScore = 0;
+	/*
+	 * Chaque case stocke maintenant un demi domino donc les actions a effectuer sont plus claires
+	 * Chaque demi-domino a un type et un nombre de couronnes
+	 * 
+	 * Au lieu du "49" et "50" qui n'avait pas vraiment de sens et en plus qui aurait casse le programme si on a plus de 48 dominos,
+	 * on a "Chateau" et "Forbidden" comme type de domino sur la case en question
+	 * 
+	 * Au lieu d'un 0 lorsque le plateau n'est pas rempli, il y a un domino de type vide
+	 */
+	
+//  Les donnees d'avant qui ont ete changees
+//	private int[][] board = new int[11][11];
+//	public int chateau=49;
+//	public int vide=50;
+
+	public Player(int nbKing,String color, int size) {
 		this.nbKing = nbKing;
 		this.color = color;
-		this.board = new int[sizeBoard*2-1][sizeBoard*2-1];
-		board[sizeBoard-1][sizeBoard-1] = 0;
-		this.deck = deck;
+		this.size = size;
+		board = new HalfDomino[size*2+1][size*2+1];
+		
+		// Je remplis mon board de cases vides
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				board[i][j] = vide;
+			}
+		}
+		
+		// Puis je mets le chateau et les cases interdites sur les bords
+		board[size][size] = chateau;
+		for (int i = 0; i < size*2+1; i++) {
+			board[0][i] = forbidden;
+			board[size*2][i] = forbidden;
+		}
+		for (int i = 0; i < size*2+1; i++) {
+			board[i][0] = forbidden;
+			board[i][size*2] = forbidden;
+		}
 	}
 	
-public boolean isPlacable(int x1, int y1, int x2, int y2) {
-		if (board[x1][y1]==0 && board[x2][y2]==0) { // 2 cases vides
-			if (x1==x2) { // domino à la verticale 
-				if (   getTypeCase(board[x1][y1])==getTypeCase(board[x1-1][y1])
-					|| getTypeCase(board[x1][y1])==getTypeCase(board[x1+1][y1])
-					|| getTypeCase(board[x2][y2])==getTypeCase(board[x2-1][y2])
-					|| getTypeCase(board[x2][y2])==getTypeCase(board[x2+1][y2]) //test droite/gauche
-					|| board[x1-1][y1]==49
-					|| board[x1+1][y1]==49
-					|| board[x2-1][y2]==49
-					|| board[x2+1][y2]==49) { //test chateau
-						return true;
+	public static void main(String[] args) {
+		Player p = new Player(1, "a", 5);
+		
+		p.placeDomino(5, 6, 5, 7,new Domino(1,0,"Prairie", "Champs", 1));
+//		p.placeDomino(4, 4, 3, 4,new Domino(1,0,"Champs", "Foret", 2));
+//		p.placeDomino(4, 3, 3, 3,new Domino(0,0,"Champs", "Champs", 3));
+//		p.placeDomino(3, 6, 4, 6,new Domino(1,0,"Mont", "Champs", 4));
+//		p.placeDomino(3, 7, 4, 7,new Domino(1,0,"Mont", "Champs", 5));
+//		p.placeDomino(6, 5, 7, 5,new Domino(1,0,"Champs", "Mont", 6));
+//		p.placeDomino(5, 4, 5, 6,new Domino(0,0,"Champs", "Champs", 7));
+		
+//		Player p = new Player(1, "a", 7);
+//		
+//		p.placeDomino(7, 6, 7, 5,new Domino(1,0,"Champs", "Mont", 1));
+//		p.placeDomino(7, 4, 7, 3,new Domino(1,0,"Mont", "Champs", 4));
+//		p.placeDomino(7, 1, 7, 2,new Domino(0,0,"Champs", "Champs", 3));
+		
+		p.printBoard();
+		p.scoreBoard();
+		Domino test = new Domino(0,0,"Mine", "Mine", 7);
+		p.listPlacable(test);
+		
+	}
+
+	public void printBoard() {
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				System.out.print("\t"+ board[j][i].getType());
+			}
+			System.out.println();
+		}
+	}
+
+	public boolean isPlacable(int x1, int y1, int x2, int y2, Domino domino) {
+		HalfDomino case1 = domino.getHalf(0);
+		HalfDomino case2 = domino.getHalf(1);
+		// 2 cases vides
+		if (board[x1][y1] == vide && board[x2][y2] == vide) {
+			// rectangle
+			if (isDomino(x1,y1,x2,y2)) {
+				// A cote du chateau ou a cote d'un meme type
+				if (   board[x1-1][y1] == chateau || board[x1+1][y1] == chateau
+					|| board[x2-1][y2] == chateau || board[x2+1][y2] == chateau
+					|| board[x1][y1+1] == chateau || board[x2][y2-1] == chateau
+					|| board[x1][y1-1] == chateau || board[x2][y2+1] == chateau
+					|| case1.getType().equals(board[x1-1][y1].getType()) || case1.getType().equals(board[x1+1][y1].getType())
+					|| case2.getType().equals(board[x2-1][y2].getType()) || case2.getType().equals(board[x2+1][y2].getType())
+					|| case1.getType().equals(board[x1][y1+1].getType()) || case1.getType().equals(board[x1][y1-1].getType())
+					|| case2.getType().equals(board[x2][y2+1].getType()) || case2.getType().equals(board[x2][y2-1].getType()) ) {
+					return true;
 				}
-				if (y1>y2) { // position nord
-					if (   getTypeCase(board[x1][y1])==getTypeCase(board[x1][y1+1])
-						|| getTypeCase(board[x2][y2])==getTypeCase(board[x2][y2-1]) //test haut/bas
-						|| board[x1][y1+1]==49
-						|| board[x2][y2-1]==49) { //test chateau
-						return true;
-					}
-					else {
-						return false;
-					}
-				}
-				else { // position sud
-					if (   getTypeCase(board[x1][y1])==getTypeCase(board[x1][y1-1])
-						|| getTypeCase(board[x2][y2])==getTypeCase(board[x2][y2+1]) //test bas/haut
-						|| board[x1][y1-1]==49
-						|| board[x2][y2+1]==49) { //test chateau 
-						return true;
-					}
-					else {
-						return false;
-					}
+				else {
+					return false;
 				}
 			}
-			else { // domino à l'horizontale
-				if (   getTypeCase(board[x1][y1])==getTypeCase(board[x1][y1+1])
-					|| getTypeCase(board[x1][y1])==getTypeCase(board[x1][y1-1])
-					|| getTypeCase(board[x2][y2])==getTypeCase(board[x2][y2+1])
-					|| getTypeCase(board[x2][y2])==getTypeCase(board[x2][y2-1]) //test haut/bas
-					|| board[x1][y1+1]==49
-					|| board[x1][y1-1]==49
-					|| board[x2][y2+1]==49
-					|| board[x2][y2-1]==49) { //test chateau  
-						return true;
-				}
-				if (x1>x2) { // position est
-					if (   getTypeCase(board[x1][y1])==getTypeCase(board[x1+1][y1])
-						|| getTypeCase(board[x2][y2])==getTypeCase(board[x2-1][y2]) //test droite/gauche
-						|| board[x1+1][y1]==49
-						|| board[x2-1][y2]==49) { // test chateau
-							return true;
-					}
-					else {
-						return false;
-					}
-				}
-				else { // position ouest
-					if (   getTypeCase(board[x1][y1])==getTypeCase(board[x1-1][y1])
-						|| getTypeCase(board[x2][y2])==getTypeCase(board[x2+1][y2]) //test gauche/droite
-						|| board[x1-1][y1]==49
-						|| board[x2+1][y2]==49) { //test chateau
-							return true;
-					}
-					else {
-						return false;
-					}
-				}
+			else {
+				return false;
 			}
 		}
 		else {
 			return false;
 		}
 	}
-//	
-//	public void placeDomino(int x1, int y1, int x2, int y2, Domino domino) {
-//		
-//	}
-//	
-//	public int[][] listPlacable() {
-//		
-//	}
-//	
-//	public int points() {
-//		
-//	}
-	
-	public String getTypeCase(int nbDomino) {
-		if (nbDomino < 0) {
-			return deck.getDomino(nbDomino).getType2();
-		}
-		else if (nbDomino == 49 || nbDomino ==50) {
-			return null;
-		}
-		else if (nbDomino > 0) {
-			return deck.getDomino(nbDomino).getType1();
+
+	public void placeDomino(int x1, int y1, int x2, int y2, Domino domino) {
+		if (isPlacable(x1,y1,x2,y2,domino)) {
+			board[x1][y1] = domino.getHalf(0);
+			board[x2][y2] = domino.getHalf(1);
+			fillBoard(x1,y1,x2,y2);
 		}
 		else {
-			return null;
+			System.out.println("Vous ne pouvez pas placer cette piece ici");
+		}
+	}
+	public void fillBoard(int x1, int y1, int x2, int y2) {
+		for (int k=1; k < size;k++) {
+			if (x1==k || x2==k) {
+				for (int i=0; i < size*2;i++) {
+					board[size+k][i] = forbidden;
+				}
+			}
+			if (x1==size*2-k || x2==size*2-k) {
+				for (int i=0; i < size*2;i++) {
+					board[size-k][i] = forbidden;
+				}
+			}
+			if (y1==k || y2==k) {
+				for (int i=0; i < size*2;i++) {
+					board[i][size+k] = forbidden;
+				}
+			}
+			if (y1==size*2-k || y2==size*2-k) {
+				for (int i=0; i < size*2;i++) {
+					board[i][size-k] = forbidden;
+				}
+			}
+		}
+	}
+
+
+	public List<int[]> listPlacable(Domino domino) {
+		List<int[]> placables = new ArrayList<int[]>();
+		for (int i = 1; i < size*2-1; i++) {
+			for (int j = 1; j < size*2-1; j++) {
+				if (isPlacable(j,i,j+1,i,domino)) {
+					int[] position = {j,i,j+1,i};
+					placables.add(position);
+				}
+				if (isPlacable(j,i,j-1,i,domino)) {
+					int[] position = {j,i,j-1,i};
+					placables.add(position);
+				}
+				if (isPlacable(j,i,j,i-1,domino)) {
+					int[] position = {j,i,j,i-1};
+					placables.add(position);
+				}
+				if (isPlacable(j,i,j,i+1,domino)) {
+					int[] position = {j,i,j,i+1};
+					placables.add(position);
+				}
+			}
+		}
+		for (int i = 0; i < placables.size(); i++) {
+			System.out.print("[ ");
+			for (int j = 0; j < 4; j++) {
+				System.out.print(placables.get(i)[j]+" ");
+			}
+			System.out.print("],");
+		}
+		return placables;
+	}
+	
+	public boolean isDomino(int x1, int y1, int x2, int y2) {
+		if (x2==x1-1 || x2==x1+1) {
+			if (y2==y1 || y2==y1) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		if (y2==y1-1 || y2==y1+1) {
+			if (x2==x1 || x2==x1) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
 		}
 	}
 	
-	public int getCrown(int nbDomino) {
-		if (nbDomino > 0) {
-			return deck.getDomino(nbDomino).getCrown();
-		}
-		else {
-			return 0;
+	public void findZone(int x, int y) {
+
+		if (!(board[x][y].isScored())) {
+			if (board[x][y] == forbidden || board[x][y] == vide || board[x][y] == chateau) {
+
+			} else {
+				zone.add(board[x][y]);
+				board[x][y].setScored(true);
+				if (board[x+1][y].getType() == board[x][y].getType() && (x+1 != size*2) && !board[x+1][y].isScored()) {
+					findZone(x+1,y);
+				}
+				if (board[x-1][y].getType() == board[x][y].getType() && (x-1 != -1) && !board[x-1][y].isScored()) {
+					findZone(x-1,y);
+				}
+				if (board[x][y+1].getType() == board[x][y].getType() && (y+1 != size*2) && !board[x][y+1].isScored()) {
+					findZone(x,y+1);
+				}
+				if (board[x][y-1].getType() == board[x][y].getType() && (y-1 != -1) && !board[x][y-1].isScored()) {
+					findZone(x,y-1);
+				}
+			}
 		}
 	}
+
+	public void scoreZone(int x, int y) {
+
+		findZone(x, y);
+		int nbCrowns = 0;
+		for (int i = 0; i<zone.size(); i++) {
+			nbCrowns += zone.get(i).getCrown();
+		}
+		totalScore += (zone.size() * nbCrowns);
+		zone = new ArrayList<HalfDomino>();
+	}
+
+	public void scoreBoard() {
+		for (int i = 0; i <size*2-1; i++) {
+			for (int j = 0; j<size*2-1; j++) {
+				scoreZone(j,i);
+			}
+		}
+		
+		// il faut créer un attribut EmpireDuMilieu pour déterminer si on joue avec cette règle
+		
+		if (/*isEmpireDuMilieu() &&*/  isCentered()) {
+			totalScore += 10;
+		}
+		
+		// pareil ici
+		
+		if(/*isHarmonie() &&*/ isFull()) {
+			totalScore += 5;
+		}
+		
+		System.out.println(totalScore);
+	}
+	
+	public boolean isCentered() {
+		if (board[size+size/2][size] != forbidden && board[size-size/2][size] != forbidden && 
+				board[size][size+size/2] != forbidden && board[size][size-size/2] != forbidden) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public boolean isFull() {
+		boolean full = true;
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				if (board[j][i] == vide) {
+					full = false;
+					break;
+				}
+			}
+		}
+		return full;
+	}
+	
+	
 }

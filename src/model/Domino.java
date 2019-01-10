@@ -1,36 +1,21 @@
 package model;
-import java.io.Serializable;
 
-public class Domino implements Comparable<Domino>, Serializable{
+public class Domino implements Comparable<Domino>{
 	private int nbDomino;
-	private String type1, type2;
-	private int nbCrown;
+	private HalfDomino[] half = new HalfDomino[2];
 	
-	public Domino(int nbDomino) {
+	public Domino(int nbCrown1, int nbCrown2, String type1, String type2, int nbDomino) {
 		this.nbDomino = nbDomino;
-	}
-	
-	public Domino(int nbCrown, String type1, String type2, int nbDomino) {
-		this.nbDomino = nbDomino;
-		this.type1 = type1;
-		this.type2 = type2;
-		this.nbCrown = nbCrown;
+		half[0] = new HalfDomino(nbCrown1, type1);
+		half[1] = new HalfDomino(nbCrown2, type2);
 	}
 	
 	public int getNumber() {
 		return nbDomino;
 	}
 	
-	public String getType1() {
-		return type1;
-	}
-	
-	public String getType2() {
-		return type2;
-	}
-	
-	public int getCrown() {
-		return nbCrown;
+	public HalfDomino getHalf(int i) {
+		return half[i];
 	}
 
 	@Override
