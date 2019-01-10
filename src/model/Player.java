@@ -286,4 +286,8 @@ public class Player {
 		}
 		return full;
 	}
+	
+	public HalfDomino[][] getBoard() {
+		return board;
+	}
 }

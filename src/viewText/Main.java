@@ -101,11 +101,28 @@ public class Main {
     		showDomino(d);
     	}
     }
+    public static Domino getOnBoardDomino(int nbDomino) {
+		for (Domino dom : Model.onBoardDominos) {
+			if (dom.getNumber() == nbDomino) {
+				return dom;
+			}
+		}
+		return null;
+	}
     
     public static int dominoChoice(int i) {
     	System.out.println("Joueur "+ (i+1) +" quelle domino choisissez vous ? (donner son numéro)");
     	int d=scan.nextInt();
     	scan.nextLine();
+    	while((getOnBoardDomino(d)!=Model.deck.getDomino(d)) &&(d >48)) {
+    		System.out.println("Joueur "+ (i+1) +" quelle domino choisissez vous ? (donner son numéro)");
+        	d=scan.nextInt();
+        	scan.nextLine();
+        	System.out.println("tu es dans la boucle");
+    	}
+    	System.out.println("sortit et "+ getOnBoardDomino(d));
+    	System.out.println("sortit et "+ Model.deck.getDomino(d));
+    	System.out.println(d<=48);
     	return d;
     }
     
@@ -162,17 +179,15 @@ public class Main {
 						//aide pour débuguer
 						System.out.println("tu peut le placer : " + Model.player[j].listPlacable(d));
 						dominoPlace(j,d);
+						coord.clear();
 						
 //						montre les dominos suivant pour qu'il choisisse son prochain domino
 						
 						showDominos(Model.onBoardDominos);
 						int dc = dominoChoice(j);
-						System.out.println(Model.deck.getDomino(dc));
-						System.out.println(Model.dominosPlaying.get(j));
 //						Recupere l'ordre du domino qu'il a choisi pour avoir l'ordre de jeu
 						
 							for(int k=0; k< Model.onBoardDominos.size(); k++) {
-								System.out.println(Model.deck.getDomino(dc)==Model.onBoardDominos.get(k));
 								if(Model.deck.getDomino(dc)==Model.onBoardDominos.get(k)) {
 									newOrder2[j]=Model.onBoardDominos.indexOf(Model.onBoardDominos.get(k));
 								}
@@ -180,7 +195,6 @@ public class Main {
 					}
 			}	
 				//met à jour l'ordre de jeu
-				System.out.println(newOrder2);
 				for(int z = 0; z < Model.onBoardDominos.size(); z++) {
 					newOrder[z]=newOrder2[z];
 				}
