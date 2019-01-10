@@ -1,7 +1,10 @@
 package model;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Deck {
 	private ArrayList<Domino> deck = new ArrayList<>();
@@ -45,5 +48,30 @@ public class Deck {
 	
 	public void add(int nbCrown1, int nbCrown2, String type1, String type2, int nb) {
 		deck.add(new Domino(nbCrown1, nbCrown2, type1, type2, nb));
+	}
+	
+	public void importDeck() {
+		Scanner sc = null;
+		try {
+		    sc = new Scanner(new File("dominos.csv"));
+		} catch (FileNotFoundException e) {
+		    System.out.println("Fichier non trouve");
+		}
+
+		try {
+			sc.nextLine();
+			while (sc.hasNext()) {
+				String line = sc.nextLine();
+			    String[] elements = line.split(",");
+			    this.add(Integer.parseInt(elements[0]),
+			    		Integer.parseInt(elements[2]),
+			    		elements[1],
+			    		elements[3],
+			    		Integer.parseInt(elements[4]));
+			}
+		}
+		finally {
+			sc.close();
+		}
 	}
 }

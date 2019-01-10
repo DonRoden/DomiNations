@@ -121,30 +121,4 @@ public class Model {
 		}
 	}
 
-
-
-	public static void importDeck() {
-		Scanner sc = null;
-		try {
-		    sc = new Scanner(new File("dominos.csv"));
-		} catch (FileNotFoundException e) {
-		    System.out.println("Fichier non trouve");
-		}
-
-		try {
-			sc.nextLine();
-			while (sc.hasNext()) {
-				String line = sc.nextLine();
-			    String[] elements = line.split(",");
-			    deck.add(Integer.parseInt(elements[0]),
-			    		Integer.parseInt(elements[2]),
-			    		elements[1],
-			    		elements[3],
-			    		Integer.parseInt(elements[4]));
-			}
-		}
-		finally {
-			sc.close();
-		}
-	}
 }
