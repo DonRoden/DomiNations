@@ -12,7 +12,7 @@ public class Player {
 	private HalfDomino vide = new HalfDomino(0, ".");
 	private HalfDomino forbidden = new HalfDomino(0, "X");
 	private List<HalfDomino> zone = new ArrayList<HalfDomino>();
-	private int totalScore = 0;
+	public int totalScore = 0;
 	/*
 	 * Chaque case stocke maintenant un demi domino donc les actions a effectuer sont plus claires
 	 * Chaque demi-domino a un type et un nombre de couronnes
@@ -175,13 +175,13 @@ public class Player {
 				}
 			}
 		}
-		for (int i = 0; i < placables.size(); i++) {
-			System.out.print("[ ");
-			for (int j = 0; j < 4; j++) {
-				System.out.print(placables.get(i)[j]+" ");
-			}
-			System.out.print("],");
-		}
+//		for (int i = 0; i < placables.size(); i++) {
+//			System.out.print("[ ");
+//			for (int j = 0; j < 4; j++) {
+//				System.out.print(placables.get(i)[j]+" ");
+//			}
+//			System.out.print("],");
+//		}
 		return placables;
 	}
 	
@@ -251,15 +251,15 @@ public class Player {
 		
 		// il faut créer un attribut EmpireDuMilieu pour déterminer si on joue avec cette règle
 		
-		if (/*isEmpireDuMilieu() &&*/  isCentered()) {
-			totalScore += 10;
-		}
-		
-		// pareil ici
-		
-		if(/*isHarmonie() &&*/ isFull()) {
-			totalScore += 5;
-		}
+//		if (/*isEmpireDuMilieu() &&*/  isCentered()) {
+//			totalScore += 10;
+//		}
+//		
+//		// pareil ici
+//		
+//		if(/*isHarmonie() &&*/ isFull()) {
+//			totalScore += 5;
+//		}
 		
 		System.out.println(totalScore);
 	}
@@ -274,6 +274,7 @@ public class Player {
 			return false;
 		}
 	}
+	
 	public boolean isFull() {
 		boolean full = true;
 		for (int i = 0; i < board.length; i++) {
@@ -285,5 +286,9 @@ public class Player {
 			}
 		}
 		return full;
+	}
+	
+	public HalfDomino[][] getBoard() {
+		return board;
 	}
 }

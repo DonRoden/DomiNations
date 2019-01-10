@@ -61,7 +61,7 @@ public class Model {
 	}
 	
 	public static void shuffleDeck() {
-		deck.shuffle(12*nbKings);
+		deck.shuffle(12*player.length);
 	}
 	
 	public static void draw() {

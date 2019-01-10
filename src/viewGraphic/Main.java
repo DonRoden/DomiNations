@@ -3,6 +3,7 @@ package viewGraphic;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.Deck;
 import model.Domino;
 import model.Model;
 import model.Player;
@@ -12,6 +13,7 @@ public class Main extends Application {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		
 		Application.launch(Main.class, args);
 	}
 	
@@ -28,13 +30,15 @@ public class Main extends Application {
 		if (nbOrder == Model.order.length-1) {
 			if (!Model.deck.hasNext())
 				end();
-			System.out.println("End of turn");
-			for (int i = 0; i < Model.newOrder.length; i++) {
-				Model.order[i] = Model.newOrder[i];
-				Model.newOrder[i] = -1;
+			else {
+				System.out.println("End of turn");
+				for (int i = 0; i < Model.newOrder.length; i++) {
+					Model.order[i] = Model.newOrder[i];
+					Model.newOrder[i] = -1;
+				}
+				Game.newTurn();
+				Game.placeDomino(0);
 			}
-			Game.newTurn();
-			Game.placeDomino(0);
 		}
 		else {
 			if (Model.chosenDomino[nbOrder].getNumber() == 0)
@@ -64,7 +68,7 @@ public class Main extends Application {
 	}
 	
 	public static void end() {
-		Main.primaryStage.close();
+//		Main.primaryStage.close();
 		System.out.println("THE END");
 		for (Player p : Model.player) {
 			p.scoreBoard();
