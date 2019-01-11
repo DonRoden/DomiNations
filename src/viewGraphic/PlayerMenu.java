@@ -21,23 +21,23 @@ public class PlayerMenu extends Menu {
 	public PlayerMenu() {
 		this.addTitle("Combien de joueurs ?");
 		
-		Button un = new Button("1 Joueur");
-		un.setPrefWidth(200);	
-		un.setPrefHeight(75);
-		un.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent event) {
-				Model.setNbPlayer(1);
-				Main.setup();
-			}
-		});
+//		Button un = new Button("1 Joueur");
+//		un.setPrefWidth(200);	
+//		un.setPrefHeight(75);
+//		un.setOnAction(new EventHandler<ActionEvent>() {
+//			public void handle(ActionEvent event) {
+//				Model.setNbPlayer(1);
+//				Main.setup();
+//			}
+//		});
 		
 		Button deux = new Button("2 Joueurs");
 		deux.setPrefWidth(200);	
 		deux.setPrefHeight(75);
 		deux.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				Model.setNbPlayer(2);
-				Main.setup();
+				PlayerSetupMenu a = new PlayerSetupMenu(2);
+		        a.show(Main.primaryStage);
 			}
 		});
 		
@@ -46,8 +46,8 @@ public class PlayerMenu extends Menu {
 		trois.setPrefHeight(75);
 		trois.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				Model.setNbPlayer(3);
-				Main.setup();
+				PlayerSetupMenu a = new PlayerSetupMenu(3);
+		        a.show(Main.primaryStage);
 			}
 		});
 		
@@ -56,13 +56,13 @@ public class PlayerMenu extends Menu {
 		quatre.setPrefHeight(75);
 		quatre.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				Model.setNbPlayer(4);
-				Main.setup();
+				PlayerSetupMenu a = new PlayerSetupMenu(4);
+		        a.show(Main.primaryStage);
 			}
 		});
 		
 		VBox vBox = new VBox();
-		vBox.getChildren().add(un);
+//		vBox.getChildren().add(un);
 		vBox.getChildren().add(deux);
 		vBox.getChildren().add(trois);
 		vBox.getChildren().add(quatre);

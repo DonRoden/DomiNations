@@ -57,12 +57,13 @@ public class Model {
 		chosenDomino = new Domino[nbKings];
 	}
 	
-	public static void createPlayer(int i, String color) {
-		player[i] = new Player(kingPerPlayer, color, boardSize);
+	public static void createPlayer(int i, String color, String name) {
+		player[i] = new Player(kingPerPlayer, color);
+		player[i].name = name;
 	}
 	
 	public static void shuffleDeck() {
-		deck.shuffle(12*nbKings);
+		deck.shuffle(12*player.length);
 	}
 	
 	public static void draw() {

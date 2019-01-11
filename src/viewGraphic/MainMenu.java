@@ -2,15 +2,8 @@ package viewGraphic;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class MainMenu extends Menu{
 	
@@ -26,8 +19,19 @@ public class MainMenu extends Menu{
 			}
 		});
 		
+		Button infos = new Button("Règles du jeu");
+		infos.setPrefWidth(200);	
+		infos.setPrefHeight(75);
+		infos.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				InfosMenu info = new InfosMenu();
+				info.show(Main.primaryStage);
+			}
+		});
+		
 		VBox vBox = new VBox();
 		vBox.getChildren().add(play);
+		vBox.getChildren().add(infos);
 		vBox.setTranslateX(425);
 		vBox.setTranslateY(400);
 		this.root.getChildren().add(vBox);
