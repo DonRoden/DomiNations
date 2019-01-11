@@ -9,6 +9,7 @@ import java.util.Scanner;
 import model.*;
 
 
+
 public class Main {
 	static Random ran = new Random();
 	static Scanner scan = new Scanner(System.in);
@@ -19,6 +20,7 @@ public class Main {
 	
     public static void main(String[] args) {
     	Model.deck.importDeck();
+    	Model.deckTest.importDeck();
     	setupGame();
     	play();
 
@@ -114,20 +116,19 @@ public class Main {
     	System.out.println("Joueur "+ (i+1) +" quelle domino choisissez vous ? (donner son numéro)");
     	int d=scan.nextInt();
     	scan.nextLine();
-    	while((getOnBoardDomino(d)!=Model.deck.getDomino(d)) &&(d >48)) {
-    		System.out.println("Joueur "+ (i+1) +" quelle domino choisissez vous ? (donner son numéro)");
-        	d=scan.nextInt();
-        	scan.nextLine();
-        	System.out.println("tu es dans la boucle");
+    	
+    	if(getOnBoardDomino(d)!=Model.deck.getDomino(d) || d>48) {
+    		dominoChoice(i);
+    		return d;
+    		
     	}
-    	System.out.println("sortit et "+ getOnBoardDomino(d));
-    	System.out.println("sortit et "+ Model.deck.getDomino(d));
-    	System.out.println(d<=48);
-    	return d;
+    	else {
+        	return d;
+    	}
     }
     
     public static void getCoord(int i) {
-    	System.out.println("Joueur "+ (i+1) +", veuillez rentrer la coordonnée selon x de la première partie du domino");
+    	System.out.println("\n\nJoueur "+ (i+1) +", veuillez rentrer la coordonnée selon x de la première partie du domino");
     	coord.add(scan.nextInt());
     	scan.nextLine();
     	System.out.println("Joueur "+ (i+1) +" veuillez rentrer la coordonnée selon y de la première partie du domino");
@@ -176,10 +177,13 @@ public class Main {
 						Model.player[j].printBoard();
 						Domino d=Model.dominosPlaying.get(i);
 						showDomino(d);
-						//aide pour débuguer
-						System.out.println("tu peut le placer : " + Model.player[j].listPlacable(d));
-						dominoPlace(j,d);
-						coord.clear();
+						//si le joueurs peut placer le domino on l'autorise à le placer sinon on passe au choix
+						
+							if(Model.player[j].listPlacable(d).size()!=0) {
+								dominoPlace(j,d);
+								coord.clear();
+							}
+							
 						
 //						montre les dominos suivant pour qu'il choisisse son prochain domino
 						
@@ -195,22 +199,15 @@ public class Main {
 					}
 			}	
 				//met à jour l'ordre de jeu
-				for(int z = 0; z < Model.onBoardDominos.size(); z++) {
-					newOrder[z]=newOrder2[z];
+					newOrder=newOrder2;
 				}
-
+				//fin de la partie, on compte les points
+				System.out.println("La partie est finie  !!!");
+				for (Player p : Model.player) {
+					p.scoreBoard();
+					System.out.println("Score : " + p.totalScore);
+				}
 			
 		}
-
-		/*
-		 * pour chaque joueur
-		 *		 placer domino
-		*		 choisir dominos
-		*
-		*if (c'est fini)
-		*		compter les points
-		*		dire qui c'est qu'a gagnï¿½
-		 * piocher donimos
-		 */
 	}	
-}
+

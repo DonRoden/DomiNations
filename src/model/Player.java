@@ -12,7 +12,7 @@ public class Player {
 	private HalfDomino vide = new HalfDomino(0, ".");
 	private HalfDomino forbidden = new HalfDomino(0, "X");
 	private List<HalfDomino> zone = new ArrayList<HalfDomino>();
-	private int totalScore = 0;
+	public int totalScore = 0;
 	/*
 	 * Chaque case stocke maintenant un demi domino donc les actions a effectuer sont plus claires
 	 * Chaque demi-domino a un type et un nombre de couronnes
