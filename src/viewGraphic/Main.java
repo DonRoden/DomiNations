@@ -94,18 +94,8 @@ public class Main extends Application {
 		Main.primaryStage = primaryStage;
         primaryStage.setTitle("Domi'Nations");
         
-//        MainMenu mainMenu = new MainMenu();
-//        mainMenu.show(primaryStage);
-		
-        int nbPlayer = 4;
-		Model.setNbPlayer(nbPlayer);
-		for (int i = 0; i < nbPlayer-1; i++) {
-			Model.createPlayer(i, "Red", "Joueur"+i, false);
-		}
-		Model.createPlayer(2, "Red", "IA", true);
-		Model.createPlayer(3, "", "IA2", true);
-
-		setup(nbPlayer);
+        MainMenu mainMenu = new MainMenu();
+        mainMenu.show(primaryStage);
         
         primaryStage.show();
     }
