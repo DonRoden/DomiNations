@@ -32,6 +32,7 @@ public class PlayerSetupMenu extends Menu{
 			player.getChildren().add(name);
 			
 			CheckBox cb = new CheckBox("Ordinateur");
+			
 			player.getChildren().add(cb);
 			playerGrid.add(player, i%2, (int)i/2);
 		}
@@ -40,7 +41,8 @@ public class PlayerSetupMenu extends Menu{
 			public void handle(MouseEvent e) {
 				Model.setNbPlayer(nbPlayer);
 				for (int i = 0; i < nbPlayer; i++) {
-					Model.createPlayer(i, "Red", ((TextField)((VBox)playerGrid.getChildren().get(i)).getChildren().get(1)).getText());
+					boolean isIA = ((CheckBox)((VBox)playerGrid.getChildren().get(i)).getChildren().get(2)).isSelected();
+					Model.createPlayer(i, "Red", ((TextField)((VBox)playerGrid.getChildren().get(i)).getChildren().get(1)).getText(), isIA);
 				}
 				Main.setup(nbPlayer);
 			}

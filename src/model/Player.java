@@ -13,6 +13,7 @@ public class Player {
 	static HalfDomino vide = new HalfDomino(0, ".");
 	static HalfDomino forbidden = new HalfDomino(0, "X");
 	public int totalScore;
+	public Lagia ia;
 	
 	/*
 	 * Chaque case stocke maintenant un demi domino donc les actions a effectuer sont plus claires
@@ -28,7 +29,7 @@ public class Player {
 //	private int[][] board = new int[11][11];
 //	public int chateau=49;
 //	public int vide=50;
-
+	
 	public Player(int nbKing,String color) {
 		this.nbKing = nbKing;
 		this.color = color;

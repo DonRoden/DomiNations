@@ -3,18 +3,17 @@ package viewGraphic;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Domino;
+import model.Lagia;
 import model.Model;
-import model.Player;
 
 public class Main extends Application {
 	public static Stage primaryStage;
+	public static Lagia ia;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
 		Application.launch(Main.class, args);
 	}
 	
@@ -37,14 +36,27 @@ public class Main extends Application {
 					Model.newOrder[i] = -1;
 				}
 				Game.newTurn();
-				Game.placeDomino(0);
+				if (Model.player[Model.order[0]].ia != null)
+					Game.iaPlaceDomino(0);
+				else	
+					Game.placeDomino(0);
 			}
 		}
 		else {
-			if (Model.chosenDomino[nbOrder].getNumber() == 0)
-				Game.placeDomino(nbOrder+1, false);
-			else
-				Game.placeDomino(nbOrder+1);
+			if (Model.chosenDomino[nbOrder].getNumber() == 0) {
+				if (Model.player[Model.order[nbOrder+1]].ia != null)
+					Game.iaChooseDomino(nbOrder+1);
+				else {
+					Game.placeDomino(nbOrder+1, false);
+				}
+			}
+			else {
+				if (Model.player[Model.order[nbOrder+1]].ia != null)
+					Game.iaPlaceDomino(nbOrder+1);
+				else {
+					Game.placeDomino(nbOrder+1);
+				}
+			}
 		}
 	}
 	
@@ -60,7 +72,11 @@ public class Main extends Application {
 		}
 	    
         Scene scene = Game.gameView();
-        Game.placeDomino(0, false);
+        if (Model.player[Model.order[0]].ia == null)
+        	Game.placeDomino(0, false);
+        else
+        	Game.iaChooseDomino(0);
+        
         primaryStage.setScene(scene);
 	}
 	
@@ -78,10 +94,18 @@ public class Main extends Application {
 		Main.primaryStage = primaryStage;
         primaryStage.setTitle("Domi'Nations");
         
-        MainMenu mainMenu = new MainMenu();
-        mainMenu.show(primaryStage);
+//        MainMenu mainMenu = new MainMenu();
+//        mainMenu.show(primaryStage);
 		
-        
+        int nbPlayer = 4;
+		Model.setNbPlayer(nbPlayer);
+		for (int i = 0; i < nbPlayer-1; i++) {
+			Model.createPlayer(i, "Red", "Joueur"+i, false);
+		}
+		Model.createPlayer(2, "Red", "IA", true);
+		Model.createPlayer(3, "", "IA2", true);
+
+		setup(nbPlayer);
         
         primaryStage.show();
     }

@@ -56,9 +56,12 @@ public class Model {
 		chosenDomino = new Domino[nbKings];
 	}
 	
-	public static void createPlayer(int i, String color, String name) {
+	public static void createPlayer(int i, String color, String name, boolean isIA) {
 		player[i] = new Player(kingPerPlayer, color);
 		player[i].name = name;
+		if (isIA) {
+			player[i].ia = new Lagia(player[i]);
+		}
 	}
 	
 	public static void shuffleDeck() {
