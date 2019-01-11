@@ -17,6 +17,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.HalfDomino;
 import model.Model;
+import model.Player;
 
 public class Game extends Parent {
 	public static final double height = 800;
@@ -197,6 +198,11 @@ public class Game extends Parent {
 	
 	public static void chooseDomino(int nbOrder) {
 		System.out.println("Entering chooseDomino");
+		//ici
+		Player p = Model.player[Model.order[nbOrder]];
+		
+		p.scoreBoard(p.board);
+		
 		
 		playerName.setText(playerName.getText() + "   Choisissez un domino");
 		for (Node box : nextTurn.getChildren()) {
@@ -251,6 +257,8 @@ public class Game extends Parent {
 	
 	public static void placeDomino(int nbOrder, boolean clickable) {
 		System.out.println("Entering placeDomino");
+		
+		
 		
 		playerName = new Text(Model.player[Model.order[nbOrder]].name);
 		topPanel.setTop(playerName);

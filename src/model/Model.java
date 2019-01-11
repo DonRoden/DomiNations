@@ -57,7 +57,7 @@ public class Model {
 	}
 	
 	public static void createPlayer(int i, String color, String name) {
-		player[i] = new Player(kingPerPlayer, color, boardSize);
+		player[i] = new Player(kingPerPlayer, color);
 		player[i].name = name;
 	}
 	

@@ -68,11 +68,7 @@ public class Main extends Application {
 		Menu endMenu = new Menu();
 		endMenu.addTitle("Fin");
 		VBox vbox = new VBox();
-		for (Player p : Model.player) {
-			p.scoreBoard();
-			vbox.getChildren().add(new Text("Score : " + p.totalScore));
-			System.out.println("Score : " + p.totalScore);
-		}
+		
 		endMenu.mainPane.setCenter(vbox);
 		endMenu.show(primaryStage);
 	}
