@@ -56,8 +56,9 @@ public class Model {
 		chosenDomino = new Domino[nbKings];
 	}
 	
-	public static void createPlayer(int i, String color) {
+	public static void createPlayer(int i, String color, String name) {
 		player[i] = new Player(kingPerPlayer, color, boardSize);
+		player[i].name = name;
 	}
 	
 	public static void shuffleDeck() {

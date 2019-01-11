@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Player {
 	public String color;
+	public String name;
 	private int nbKing;
 	private int size;
 	private HalfDomino[][] board;

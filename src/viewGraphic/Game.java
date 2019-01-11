@@ -15,7 +15,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import model.Domino;
 import model.HalfDomino;
 import model.Model;
 
@@ -84,6 +83,7 @@ public class Game extends Parent {
 	}
 	
 	public static GridPane showBoard(int idPlayer, double size) {
+		System.out.println("Entering showBoard");
 		GridPane grid = new GridPane();
 		
 		HalfDomino[][] board = Model.player[idPlayer].getBoard();
@@ -103,10 +103,13 @@ public class Game extends Parent {
 			}
 		}
 		
+		System.out.println("Exiting showBoard\n");
 		return grid;
 	}
 	
 	public static void clickableBoard(GridPane grid, int nbOrder) {
+		System.out.println("Entering clickableBoard");
+		
 		for (int i = 0; i < grid.getChildren().size(); i++) {
 				
 			Group box = (Group)grid.getChildren().get(i);
@@ -184,6 +187,8 @@ public class Game extends Parent {
 				}
 			});
 		}
+		
+		System.out.println("Exiting clickableBoard\n");
 	}
 	
 	public static void change(GridPane old, int nbOrder, double size) {
@@ -191,6 +196,8 @@ public class Game extends Parent {
 	}
 	
 	public static void chooseDomino(int nbOrder) {
+		System.out.println("Entering chooseDomino");
+		
 		playerName.setText(playerName.getText() + "   Choisissez un domino");
 		for (Node box : nextTurn.getChildren()) {
 			double size = sizeKing/4;
@@ -234,6 +241,8 @@ public class Game extends Parent {
 				}
 			});
 		}
+		
+		System.out.println("Exiting chooseDomino\n");
 	}
 	
 	public static void placeDomino(int nbOrder) {
@@ -241,12 +250,9 @@ public class Game extends Parent {
 	}
 	
 	public static void placeDomino(int nbOrder, boolean clickable) {
-//		System.out.println("NEW PLAYER \n");
-//		for (int[] i : Model.player[Model.order[nbOrder]].listPlacable(Model.chosenDomino[nbOrder])) {
-//			System.out.println(i[0] +" Puis "+i[1]);
-//		}
-		Model.player[Model.order[nbOrder]].scoreBoard();
-		playerName = new Text("Joueur " + (Model.order[nbOrder]+1));
+		System.out.println("Entering placeDomino");
+		
+		playerName = new Text(Model.player[Model.order[nbOrder]].name);
 		topPanel.setTop(playerName);
 		
 		mainBoard = new Group();	
@@ -260,7 +266,7 @@ public class Game extends Parent {
 		if (Model.player[Model.order[nbOrder]].listPlacable(Model.chosenDomino[nbOrder]).isEmpty())
 		{
 			playerName.setText(playerName.getText() + "   Tu peux pas jouer connard");
-			chooseDomino(nbOrder);
+			chooseDomino(nbOrder);			
 		}
 		else if (!clickable)
 			chooseDomino(nbOrder);
@@ -272,7 +278,7 @@ public class Game extends Parent {
 		sidePanel = new VBox();
 		for (int i = 0; i < Model.player.length; i++) {
 			if (i != Model.order[nbOrder]) {
-				sidePanel.getChildren().add(new Text("Joueur "+(i+1)));
+				sidePanel.getChildren().add(new Text(Model.player[i].name));
 				GridPane side = Game.showBoard(i, sizePlayer/13);
 				sidePanel.getChildren().add(side);
 			}
@@ -280,9 +286,13 @@ public class Game extends Parent {
 		
 		mainPane.setRight(sidePanel);
 		mainPane.setCenter(mainBoard);
+		
+		System.out.println("Exiting placeDomino\n");
 	}
 	
 	public static void newTurn() {
+		System.out.println("Entering newTurn");
+		
 		double size = sizeKing/4;
 		for (int i = 0; i < previousTurn.getChildren().size(); i++) {
 			ImageView half1 = Game.showCase(Model.onBoardDominos.get(i).getHalf(0));
@@ -300,7 +310,6 @@ public class Game extends Parent {
 		for (int i = 0; i < nextTurn.getChildren().size(); i++) {
 			Group children = ((Group)nextTurn.getChildren().get(i));
 			children.getChildren().remove(1, children.getChildren().size());
-			System.out.println(((Group)nextTurn.getChildren().get(i)).getChildren());
 			ImageView half1 = Game.showCase(Model.onBoardDominos.get(i).getHalf(0));
 			half1.setFitHeight(size);
 			half1.setFitWidth(size);
@@ -310,6 +319,8 @@ public class Game extends Parent {
 			((HBox)((Group)nextTurn.getChildren().get(i)).getChildren().get(0)).getChildren().set(0, half1);
 			((HBox)((Group)nextTurn.getChildren().get(i)).getChildren().get(0)).getChildren().set(1, half2);
 		}
+		
+		System.out.println("Exiting newTurn\n");
 	}
 	
 	static ImageView showCase(HalfDomino tile) {

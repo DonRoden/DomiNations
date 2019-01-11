@@ -1,8 +1,10 @@
 package viewGraphic;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -12,8 +14,11 @@ import javafx.stage.Stage;
 public class Menu extends Parent {
 	protected Group root = new Group();
 	protected Scene scene = new Scene(root, 1080, 720);
+	public BorderPane mainPane = new BorderPane();
 	
-	public Menu() {}
+	public Menu() {
+		root.getChildren().add(mainPane);
+	}
 	
 	public void show(Stage primaryStage) {
 		primaryStage.setScene(scene);
@@ -34,6 +39,6 @@ public class Menu extends Parent {
 		titleGroup.setTranslateY(50);
 		titleGroup.getChildren().add(titleBox);
 		titleGroup.getChildren().add(titleText);
-		root.getChildren().add(titleGroup);
+		mainPane.setTop(titleGroup);
 	}
 }

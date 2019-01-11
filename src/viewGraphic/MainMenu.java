@@ -26,8 +26,19 @@ public class MainMenu extends Menu{
 			}
 		});
 		
+		Button infos = new Button("Règles du jeu");
+		infos.setPrefWidth(200);	
+		infos.setPrefHeight(75);
+		infos.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				InfosMenu info = new InfosMenu();
+				info.show(Main.primaryStage);
+			}
+		});
+		
 		VBox vBox = new VBox();
 		vBox.getChildren().add(play);
+		vBox.getChildren().add(infos);
 		vBox.setTranslateX(425);
 		vBox.setTranslateY(400);
 		this.root.getChildren().add(vBox);

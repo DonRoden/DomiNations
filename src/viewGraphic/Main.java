@@ -2,8 +2,9 @@ package viewGraphic;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.Deck;
 import model.Domino;
 import model.Model;
 import model.Player;
@@ -31,7 +32,6 @@ public class Main extends Application {
 			if (!Model.deck.hasNext())
 				end();
 			else {
-				System.out.println("End of turn");
 				for (int i = 0; i < Model.newOrder.length; i++) {
 					Model.order[i] = Model.newOrder[i];
 					Model.newOrder[i] = -1;
@@ -50,16 +50,13 @@ public class Main extends Application {
 	
 	public static void setup(int nbPlayer) {
 		Model.deck.importDeck();
-		Model.setNbPlayer(nbPlayer);
-		for (int i = 0; i < nbPlayer; i++) {
-			Model.createPlayer(i, "Red");
-		}
 	    Model.shuffleDeck();
 	    Model.setRandomOrder();
 	    
 	    for (int i = 0; i < Model.newOrder.length; i++) {
 			Model.newOrder[i] = -1;
 			Model.onBoardDominos.add(new Domino(0,0,"X","X",0));
+			Model.deck.add(0,0,"X","X",0);
 		}
 	    
         Scene scene = Game.gameView();
@@ -68,24 +65,28 @@ public class Main extends Application {
 	}
 	
 	public static void end() {
-//		Main.primaryStage.close();
-		System.out.println("THE END");
+		Menu endMenu = new Menu();
+		endMenu.addTitle("Fin");
+		VBox vbox = new VBox();
 		for (Player p : Model.player) {
 			p.scoreBoard();
+			vbox.getChildren().add(new Text("Score : " + p.totalScore));
 			System.out.println("Score : " + p.totalScore);
 		}
+		endMenu.mainPane.setCenter(vbox);
+		endMenu.show(primaryStage);
 	}
 	
 	@Override
     public void start(Stage primaryStage) {
 		Main.primaryStage = primaryStage;
         primaryStage.setTitle("Domi'Nations");
-
-//        setup();
         
         MainMenu mainMenu = new MainMenu();
         mainMenu.show(primaryStage);
 		
+        
+        
         primaryStage.show();
     }
 }

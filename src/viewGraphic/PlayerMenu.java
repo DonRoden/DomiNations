@@ -36,7 +36,8 @@ public class PlayerMenu extends Menu {
 		deux.setPrefHeight(75);
 		deux.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				Main.setup(2);
+				PlayerSetupMenu a = new PlayerSetupMenu(2);
+		        a.show(Main.primaryStage);
 			}
 		});
 		
@@ -45,7 +46,8 @@ public class PlayerMenu extends Menu {
 		trois.setPrefHeight(75);
 		trois.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				Main.setup(3);
+				PlayerSetupMenu a = new PlayerSetupMenu(3);
+		        a.show(Main.primaryStage);
 			}
 		});
 		
@@ -54,7 +56,8 @@ public class PlayerMenu extends Menu {
 		quatre.setPrefHeight(75);
 		quatre.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				Main.setup(4);
+				PlayerSetupMenu a = new PlayerSetupMenu(4);
+		        a.show(Main.primaryStage);
 			}
 		});
 		
