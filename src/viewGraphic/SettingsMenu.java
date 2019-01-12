@@ -9,7 +9,7 @@ import model.Model;
 
 public class SettingsMenu extends Menu {
 	public SettingsMenu() {
-		this.addTitle("Options", 200);
+		this.addTitle("Options", 350);
 		
 		VBox vBox = new VBox();
 		root.getChildren().add(vBox);
@@ -28,7 +28,6 @@ public class SettingsMenu extends Menu {
 		harmony.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent e) {
 				Model.isHarmony = harmony.isSelected();
-				System.out.println(Model.isHarmony);
 			}
 		});
 		vBox.getChildren().add(harmony);
@@ -50,5 +49,8 @@ public class SettingsMenu extends Menu {
 			}
 		});
 		vBox.getChildren().add(retour);
+		
+		vBox.setTranslateX(500);
+		vBox.setTranslateY(300);
 	}
 }

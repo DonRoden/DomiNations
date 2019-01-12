@@ -19,7 +19,7 @@ public class Model {
 	public static int[] order;
 	public static int[] newOrder;
 	public static Domino[] chosenDomino;
-//	public static boolean isDynasty = false;
+	public static boolean isDynasty = false;
 	public static boolean isMiddleEmpire = false;
 	public static boolean isHarmony = false;
 	public static boolean bigDuel = false;
@@ -55,6 +55,8 @@ public class Model {
 		if (nbPlayer == 2) {
 			kingPerPlayer = 2;
 		}
+		else
+			kingPerPlayer = 1;
 		nbKings = nbPlayer*kingPerPlayer;
 		order = new int[nbKings];
 		newOrder = new int[nbKings];
