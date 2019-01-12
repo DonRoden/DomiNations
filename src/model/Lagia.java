@@ -3,13 +3,16 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import javafx.scene.paint.Color;
+
 import java.util.Collections;
 
 public class Lagia {
 	/*Classe de l'IA */
 	
 	private Player lagia;
-	private Player test = new Player(1, "");
+	private Player test = new Player(1, Color.WHITE);
 	public Domino choosedDomino;
 	public int[] choosedPosition;
 //	private Deck upcomingDominos = new Deck();

@@ -3,6 +3,8 @@ package viewGraphic;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Domino;
 import model.Lagia;
@@ -76,15 +78,18 @@ public class Main extends Application {
         	Game.placeDomino(0, false);
         else
         	Game.iaChooseDomino(0);
-        
         primaryStage.setScene(scene);
 	}
 	
 	public static void end() {
 		Menu endMenu = new Menu();
-		endMenu.addTitle("Fin");
-		VBox vbox = new VBox();
+		endMenu.addTitle("Fin", 300);
 		
+		VBox vbox = new VBox();
+			for (int i = 0 ; i < Model.player.length; i++) {
+				Model.player[i].scoreBoard(Model.player[i].board);
+				vbox.getChildren().add(new Text(Model.player[i].name +"  "+ Model.player[i].totalScore));
+			}
 		endMenu.mainPane.setCenter(vbox);
 		endMenu.show(primaryStage);
 	}

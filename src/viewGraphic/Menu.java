@@ -24,7 +24,7 @@ public class Menu extends Parent {
 		primaryStage.setScene(scene);
 	}
 	
-	public void addTitle(String title) {
+	public void addTitle(String title, double translate) {
 		Group titleGroup = new Group();
 		
 		Rectangle titleBox = new Rectangle(800, 100, Color.LIGHTGRAY);
@@ -32,8 +32,8 @@ public class Menu extends Parent {
 		Text titleText = new Text(title);
 		titleText.setFont(new Font(35));
         titleText.setFill(Color.GREY);
-        titleText.setX(300);
-        titleText.setY(55);
+        titleText.setX(translate);
+        titleText.setY(60);
 		
 		titleGroup.setTranslateX(140);
 		titleGroup.setTranslateY(50);

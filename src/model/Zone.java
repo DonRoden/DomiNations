@@ -9,7 +9,7 @@ public class Zone implements Comparable<Zone>{
 	public String type;
 	public int score;
 	public int crowns;
-	public List<HalfDomino> zone = new ArrayList<HalfDomino>();;
+	public List<HalfDomino> zone = new ArrayList<HalfDomino>();
 	
 	public Zone(int x, int y, HalfDomino[][] board) {
 		this.x = x;

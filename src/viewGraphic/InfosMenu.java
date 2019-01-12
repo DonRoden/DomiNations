@@ -4,11 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 
 public class InfosMenu extends Menu{
 	public InfosMenu() {
-		this.addTitle("Règles du jeu");
+		this.addTitle("Règles du jeu", 140);
 		
 		Text infos = new Text();
 		
@@ -31,5 +34,15 @@ public class InfosMenu extends Menu{
 		}
 		
 		mainPane.setCenter(infos);
+		
+		Button retour = new Button("Retour");
+		retour.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				MainMenu a = new MainMenu();
+				a.show(Main.primaryStage);
+			}
+		});
+		
+		mainPane.setBottom(retour);
 	}
 }

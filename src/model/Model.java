@@ -1,11 +1,10 @@
 package model;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
-import java.util.Scanner;
+
+import javafx.scene.paint.Color;
 
 public class Model {
 	public static Deck deck = new Deck();
@@ -18,6 +17,10 @@ public class Model {
 	public static int[] order;
 	public static int[] newOrder;
 	public static Domino[] chosenDomino;
+//	public static boolean isDynasty = false;
+	public static boolean isMiddleEmpire = false;
+	public static boolean isHarmony = false;
+	public static boolean bigDuel = false;
 	
 	static Random ran = new Random();
 	
@@ -56,7 +59,7 @@ public class Model {
 		chosenDomino = new Domino[nbKings];
 	}
 	
-	public static void createPlayer(int i, String color, String name, boolean isIA) {
+	public static void createPlayer(int i, Color color, String name, boolean isIA) {
 		player[i] = new Player(kingPerPlayer, color);
 		player[i].name = name;
 		if (isIA) {

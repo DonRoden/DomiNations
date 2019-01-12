@@ -1,6 +1,7 @@
 package viewGraphic;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -35,7 +36,7 @@ public class Game extends Parent {
 	static BorderPane topPanel;
 	static Rectangle cadre = new Rectangle(sizeKing*2/4, sizeKing/4, Color.grayRgb(0, 0));
 	
-	
+
 	public static Scene gameView() {
 		cadre.setStroke(Color.BLACK);
 		cadre.setStrokeWidth(3);
@@ -44,8 +45,9 @@ public class Game extends Parent {
 		topPanel = new BorderPane();
 		mainPane.setTop(topPanel);
 		playerName = new Text();
-		topPanel.setTop(playerName);
 		
+		HBox pioches = new HBox();
+		topPanel.setLeft(pioches);
 		
 		previousTurn = new VBox();
 		double size = sizeKing/4;
@@ -64,7 +66,7 @@ public class Game extends Parent {
 			previousTurn.getChildren().add(box);
 			Model.chosenDomino[i] = Model.onBoardDominos.get(i);
 		}
-		topPanel.setLeft(previousTurn);
+		pioches.getChildren().add(previousTurn);
 		
 		Model.draw();
 		nextTurn = new VBox();
@@ -81,7 +83,9 @@ public class Game extends Parent {
 			box.getChildren().add(domino);
 			nextTurn.getChildren().add(box);
 		}
-		topPanel.setRight(nextTurn);
+		pioches.getChildren().add(nextTurn);
+		pioches.setMargin(previousTurn, new Insets(5,5,5,5));
+		pioches.setMargin(nextTurn, new Insets(5,5,5,5));
 		
 		root.getChildren().add(mainPane);
 		return scene;
@@ -138,12 +142,13 @@ public class Game extends Parent {
 				public void handle(MouseEvent e) {
 					int column = GridPane.getColumnIndex((Node)e.getSource());
 					int row = GridPane.getRowIndex((Node)e.getSource());
+					int boardSize = Model.player[Model.order[nbOrder]].board.length;
 					
 					for (int i = 0; i < grid.getChildren().size(); i++) {
-						if(i == (column+1)*11+row
-								|| i == (column-1)*11+row
-								|| i == (column)*11+row+1
-								|| i == (column)*11+row-1) {
+						if(i == (column+1)*boardSize+row
+								|| i == (column-1)*boardSize+row
+								|| i == (column)*boardSize+row+1
+								|| i == (column)*boardSize+row-1) {
 							grid.getChildren().get(i).setOnMouseClicked(new EventHandler<MouseEvent>() {
 								public void handle(MouseEvent e) {
 									int idPlayer = Model.order[nbOrder];
@@ -173,7 +178,7 @@ public class Game extends Parent {
 								}
 							});
 						}
-						else if (i == (column)*11+row) {
+						else if (i == (column)*boardSize+row) {
 							grid.getChildren().get(i).setOnMouseClicked(new EventHandler<MouseEvent>() {
 								public void handle(MouseEvent e) {
 									rec.setOpacity(0.3);
@@ -186,7 +191,6 @@ public class Game extends Parent {
 							grid.getChildren().get(i).setOnMouseClicked(null);
 						}
 					}
-					
 					rec.setOpacity(0.6);
 					box.setOnMouseExited(null);
 				}
@@ -207,8 +211,8 @@ public class Game extends Parent {
 			for (int i : Model.newOrder) {
 				System.out.println(i);
 			}
-			
-			playerName.setText(playerName.getText() + "   Choisissez un domino");
+			Model.player[Model.order[nbOrder]].scoreBoard(Model.player[Model.order[nbOrder]].board);
+			playerName.setText(playerName.getText() + "  " + Model.player[Model.order[nbOrder]].totalScore + "   Choisissez un domino");
 			for (Node box : nextTurn.getChildren()) {
 				double size = sizeKing/4;
 				Rectangle rec = new Rectangle(size*2, size, Color.LIGHTGRAY);
@@ -291,6 +295,7 @@ public class Game extends Parent {
 		GridPane board = Game.showBoard(Model.order[nbOrder], sizePlayer*2/13);
 		mainBoard = new Group();	
 		Group group = (Group)previousTurn.getChildren().get(nbOrder);
+		cadre.setStroke(Model.player[Model.order[nbOrder]].color);
 		group.getChildren().add(cadre);
 		
 		if (Model.player[Model.order[nbOrder]].listPlacable(Model.chosenDomino[nbOrder]).isEmpty())
@@ -308,12 +313,19 @@ public class Game extends Parent {
 		sidePanel = new VBox();
 		for (int i = 0; i < Model.player.length; i++) {
 			if (i != Model.order[nbOrder]) {
-				System.out.println("Player : " + Model.player);
-				sidePanel.getChildren().add(new Text(Model.player[i].name));
+				Model.player[i].scoreBoard(Model.player[i].board);
+				Text name = new Text(Model.player[i].name);
+				name.setTranslateX(15);
+				Text points = new Text("Points : "+Model.player[i].totalScore);
+				points.setTranslateX(15);
+				name.setFill(Model.player[i].color);
+				sidePanel.getChildren().add(name);
+				sidePanel.getChildren().add(points);
 				GridPane side = Game.showBoard(i, sizePlayer/13);
 				sidePanel.getChildren().add(side);
 			}
 		}
+		sidePanel.setTranslateY(-200);
 		
 		mainPane.setRight(sidePanel);
 		mainPane.setCenter(mainBoard);
@@ -323,12 +335,12 @@ public class Game extends Parent {
 	
 	public static void iaPlaceDomino(int nbOrder) {
 		Lagia ia = Model.player[Model.order[nbOrder]].ia;
-		ia.choosePosition(ia.choosedDomino);
+		ia.choosePosition(Model.chosenDomino[nbOrder]);
 		Model.player[Model.order[nbOrder]].placeDomino(ia.choosedPosition[0], 
 				ia.choosedPosition[1],
 				ia.choosedPosition[2],
 				ia.choosedPosition[3],
-				ia.choosedDomino);
+				Model.chosenDomino[nbOrder]);
 		iaChooseDomino(nbOrder);
 	}
 	

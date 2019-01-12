@@ -3,8 +3,10 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.paint.Color;
+
 public class Player {
-	public String color;
+	public Color color = Color.CHOCOLATE;
 	public String name;
 	private int nbKing;
 	static int size = Model.boardSize;
@@ -30,7 +32,7 @@ public class Player {
 //	public int chateau=49;
 //	public int vide=50;
 	
-	public Player(int nbKing,String color) {
+	public Player(int nbKing, Color color) {
 		this.nbKing = nbKing;
 		this.color = color;
 		board = new HalfDomino[size*2+1][size*2+1];
@@ -189,7 +191,7 @@ public class Player {
 		}
 	}
 
-	public void scoreBoard(HalfDomino[][] board) {
+	public int scoreBoard(HalfDomino[][] board) {
 		totalScore = 0;
 		for (int i = 0; i <size*2-1; i++) {
 			for (int j = 0; j<size*2-1; j++) {
@@ -215,10 +217,10 @@ public class Player {
 //			totalScore += 5;
 //		}
 		
-		System.out.println(totalScore);
+		return totalScore;
 	}
 	
-	public boolean isCentered(HalfDomino[][] board) {
+	public boolean isCentered() {
 		if (board[size+size/2][size] != forbidden && board[size-size/2][size] != forbidden && 
 
 				board[size][size+size/2] != forbidden && board[size][size-size/2] != forbidden) {
@@ -229,7 +231,7 @@ public class Player {
 		}
 	}
 	
-	public boolean isFull(HalfDomino[][] board) {
+	public boolean isFull() {
 		boolean full = true;
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
