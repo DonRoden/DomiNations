@@ -42,15 +42,16 @@ public class Main extends Application {
 	
 	public static void keepGoing(int nbOrder) {
 		if (nbOrder >= Model.order.length-1) {
+			Model.lastTurn = !Model.deck.hasNext();
 				for (int i = 0; i < Model.newOrder.length; i++) {
 					Model.order[i] = Model.newOrder[i];
 					Model.newOrder[i] = -1;
 				}
-				Game.newTurn(Model.deck.hasNext());
+				Game.newTurn(!Model.lastTurn);
 				if (Model.player[Model.order[0]].ia != null)
 					Game.iaPlaceDomino(0);
 				else	
-					Game.placeDomino(0, true, !Model.deck.hasNext());
+					Game.placeDomino(0, true, Model.lastTurn);
 		}
 		else {
 			if (Model.chosenDomino[nbOrder].getNumber() == 0) {
@@ -64,7 +65,7 @@ public class Main extends Application {
 				if (Model.player[Model.order[nbOrder+1]].ia != null)
 					Game.iaPlaceDomino(nbOrder+1);
 				else {
-					Game.placeDomino(nbOrder+1, true, !Model.deck.hasNext());
+					Game.placeDomino(nbOrder+1, true, Model.lastTurn);
 				}
 			}
 		}
@@ -91,7 +92,6 @@ public class Main extends Application {
 	}
 	
 	public static void end() {
-		System.out.println("Connard de merde");
 		Menu endMenu = new Menu();
 		endMenu.addTitle("Fin", 375);
 		
@@ -112,7 +112,6 @@ public class Main extends Application {
 		a.getChildren().add(felicitation);
 		
 		for (Player p : winners) {
-			System.out.println(p.name);
 			Text vainqueur = new Text(p.name + " avec " + p.totalScore + " points");
 			a.getChildren().add(vainqueur);
 			a.setMargin(vainqueur, new Insets(5,5,5,20));
