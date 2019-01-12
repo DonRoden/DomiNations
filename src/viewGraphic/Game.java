@@ -19,6 +19,7 @@ import javafx.scene.text.Text;
 import model.HalfDomino;
 import model.Lagia;
 import model.Model;
+import model.Player;
 
 public class Game extends Parent {
 	public static final double height = 800;
@@ -108,7 +109,7 @@ public class Game extends Parent {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
 				Group box = new Group();
-				ImageView type = showCase(board[i][j]);
+				ImageView type = showCase(board[i][j], Model.player[idPlayer]);
 				type.setFitWidth(size);
 				type.setFitHeight(size);
 				box.getChildren().add(type);
@@ -417,10 +418,28 @@ public class Game extends Parent {
 		
 		System.out.println("Exiting newTurn\n");
 	}
-	
 	static ImageView showCase(HalfDomino tile) {
+		return showCase(tile, new Player(0,Color.WHITE));
+	}
+	
+	static ImageView showCase(HalfDomino tile, Player player) {
 		if (tile.getType().equals("Castle")) {
-			return new ImageView(new Image("img/chateau.jpg"));
+			if (player.color == Color.CORNFLOWERBLUE) {
+				return new ImageView(new Image("img/chateaubleu.jpg"));
+			}
+			if (player.color == Color.HOTPINK) {
+				return new ImageView(new Image("img/chateaurose.jpg"));
+			}
+			if (player.color == Color.SEAGREEN) {
+				return new ImageView(new Image("img/chateauvert.jpg"));
+			}
+			if (player.color == Color.CHOCOLATE) {
+				return new ImageView(new Image("img/chateauorange.jpg"));
+			}
+			else {
+				return new ImageView(new Image("img/chateau.jpg"));
+			}
+			
 		}
 		else if (tile.getType().equals("Champs")) {
 			if (tile.getCrown() == 1)
