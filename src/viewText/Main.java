@@ -65,11 +65,14 @@ public class Main {
 
     	for (int i : Model.order) {
     		int d = dominoChoice(i,dc);
+    		dc.add(d);
     		for(int k=0; k< Model.order.length; k++) {
     			if(Model.deck.getDomino(d)==Model.onBoardDominos.get(k))
     				newOrder[k]=i;
     		}
     	}
+    	dc.clear();
+    	dc.add(0);
 	}
     
     public static void nbPlayer() {
