@@ -14,8 +14,9 @@ public class Main {
 	static Random ran = new Random();
 	static Scanner scan = new Scanner(System.in);
 	static List<Integer> coord=new ArrayList<>();
-	static Player lagia = new Player(1, "a", 5);
+	static Player lagia = new Player(1, "a");
 	static int [] newOrder= new int[4];
+	static List<Integer> dc=new ArrayList<>();
 
 	
     public static void main(String[] args) {
@@ -52,7 +53,8 @@ public class Main {
     	Model.draw();
     	
     	//On affiche la pioche
-    	showDominos(Model.onBoardDominos);
+    	dc.add(0);
+    	showDominos(Model.onBoardDominos,dc);
     	
     	//On definit un ordre aleatoire pour le premier tour
     	Model.setRandomOrder();
@@ -86,9 +88,9 @@ public class Main {
     }
     
     public static void colorChoice(int i){
-    	System.out.println("Joueur"+" " +(i+1)+" "+"quelle couleur voulez-vous ? (Rouge, Vert, Jaune, Bleu)");
-		String color = scan.nextLine();
-		Model.createPlayer(i, color);
+    	System.out.println("Joueur"+" " +(i+1)+" "+" comment vous appellez-vous ? (alex, paul...)");
+		String name = scan.nextLine();
+		Model.createPlayer(i, "", name);
 
     }
     
@@ -98,9 +100,16 @@ public class Main {
 				+ "Le deuxieme territoire est "+ d.getHalf(1).getType() +" avec "+ d.getHalf(1).getCrown() +" couronnes\n");
     }
     
-    public static void showDominos(ArrayList<Domino> dominos) {
+    public static void showDominos(ArrayList<Domino> dominos, List<Integer> dc) {
     	for(Domino d : dominos) {
-    		showDomino(d);
+    		if(dc.size()==1) {
+    			showDomino(d);
+    		}
+    		else {
+    			if(!dc.contains(d.getNumber())) {
+    				showDomino(d);	
+    			}
+    		}
     	}
     }
     public static Domino getOnBoardDomino(int nbDomino) {
@@ -128,7 +137,7 @@ public class Main {
     }
     
     public static void getCoord(int i) {
-    	System.out.println("\n\nJoueur "+ (i+1) +", veuillez rentrer la coordonnée selon x de la première partie du domino");
+    	System.out.println("Joueur "+ (i+1) +", veuillez rentrer la coordonnée selon x de la première partie du domino");
     	coord.add(scan.nextInt());
     	scan.nextLine();
     	System.out.println("Joueur "+ (i+1) +" veuillez rentrer la coordonnée selon y de la première partie du domino");
@@ -187,24 +196,28 @@ public class Main {
 						
 //						montre les dominos suivant pour qu'il choisisse son prochain domino
 						
-						showDominos(Model.onBoardDominos);
-						int dc = dominoChoice(j);
+						showDominos(Model.onBoardDominos,dc);
+						
+						int newDc =dominoChoice(j);
+						dc.add(newDc);
 //						Recupere l'ordre du domino qu'il a choisi pour avoir l'ordre de jeu
 						
-							for(int k=0; k< Model.onBoardDominos.size(); k++) {
-								if(Model.deck.getDomino(dc)==Model.onBoardDominos.get(k)) {
-									newOrder2[j]=Model.onBoardDominos.indexOf(Model.onBoardDominos.get(k));
+							for(Domino domino:Model.onBoardDominos) {
+								if(Model.deck.getDomino(newDc)==domino) {
+									newOrder2[Model.onBoardDominos.indexOf(domino)]=j;
 								}
 							}
 					}
 			}	
 				//met à jour l'ordre de jeu
 					newOrder=newOrder2;
+					dc.clear();
+					dc.add(0);
 				}
 				//fin de la partie, on compte les points
 				System.out.println("La partie est finie  !!!");
 				for (Player p : Model.player) {
-					p.scoreBoard();
+					p.scoreBoard(p.board);
 					System.out.println("Score : " + p.totalScore);
 				}
 			

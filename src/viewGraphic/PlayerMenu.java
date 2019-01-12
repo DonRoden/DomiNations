@@ -16,20 +16,9 @@ import javafx.stage.Stage;
 import model.Model;
 
 public class PlayerMenu extends Menu {
-	private VBox buttonBox = new VBox();
 	
 	public PlayerMenu() {
-		this.addTitle("Combien de joueurs ?");
-		
-//		Button un = new Button("1 Joueur");
-//		un.setPrefWidth(200);	
-//		un.setPrefHeight(75);
-//		un.setOnAction(new EventHandler<ActionEvent>() {
-//			public void handle(ActionEvent event) {
-//				Model.setNbPlayer(1);
-//				Main.setup();
-//			}
-//		});
+		this.addTitle("Combien de joueurs ?", 250);
 		
 		Button deux = new Button("2 Joueurs");
 		deux.setPrefWidth(200);	
@@ -62,11 +51,10 @@ public class PlayerMenu extends Menu {
 		});
 		
 		VBox vBox = new VBox();
-//		vBox.getChildren().add(un);
 		vBox.getChildren().add(deux);
 		vBox.getChildren().add(trois);
 		vBox.getChildren().add(quatre);
-		vBox.setTranslateX(425);
+		vBox.setTranslateX(445);
 		vBox.setTranslateY(400);
 		this.root.getChildren().add(vBox);
 	}

@@ -3,13 +3,13 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Zone {
+public class Zone implements Comparable<Zone>{
 	public int x;
 	public int y;
 	public String type;
 	public int score;
 	public int crowns;
-	public List<HalfDomino> zone = new ArrayList<HalfDomino>();;
+	public List<HalfDomino> zone = new ArrayList<HalfDomino>();
 	
 	public Zone(int x, int y, HalfDomino[][] board) {
 		this.x = x;
@@ -63,5 +63,15 @@ public class Zone {
 		}
 		score += (zone.size() * crowns);
 		return score;
+	}
+	
+	@Override
+	public int compareTo(Zone arg0) {
+		if (this.getScore() < arg0.getScore())
+			return -1;
+		else if (this.getScore() > arg0.getScore())
+			return 1;
+		else
+			return 0;
 	}
 }

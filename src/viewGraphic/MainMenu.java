@@ -8,7 +8,7 @@ import javafx.scene.layout.VBox;
 public class MainMenu extends Menu{
 	
 	public MainMenu() {
-		this.addTitle("Domi'Nations");
+		this.addTitle("Domi'Nations", 300);
 		
 		Button play = new Button("Play");
 		play.setPrefWidth(200);	
@@ -29,10 +29,21 @@ public class MainMenu extends Menu{
 			}
 		});
 		
+		Button settings = new Button("Options");
+		settings.setPrefWidth(200);	
+		settings.setPrefHeight(75);
+		settings.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent e) {
+				SettingsMenu set = new SettingsMenu();
+				set.show(Main.primaryStage);
+			}
+		});
+		
 		VBox vBox = new VBox();
 		vBox.getChildren().add(play);
 		vBox.getChildren().add(infos);
-		vBox.setTranslateX(425);
+		vBox.getChildren().add(settings);
+		vBox.setTranslateX(445);
 		vBox.setTranslateY(400);
 		this.root.getChildren().add(vBox);
 	}
