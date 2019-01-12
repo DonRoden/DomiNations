@@ -70,10 +70,10 @@ public class Model {
 	}
 	public static int finalScore(Player player) {
 		int finalScore = player.scoreBoard(player.board);
-		if (isMiddleEmpire && player.isCentered(player.board)) {
+		if (isMiddleEmpire && player.isCentered()) {
 			finalScore += 10;
 		}
-		if (isHarmony && player.isFull(player.board)) {
+		if (isHarmony && player.isFull()) {
 			finalScore += 5;
 		}
 		return finalScore;

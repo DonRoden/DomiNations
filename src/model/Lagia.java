@@ -44,28 +44,28 @@ public class Lagia {
 							&& lagia.bestZone(board).get(0).getZone().size() > 2 
 							&& lagia.bestZone(board).get(0).getCrowns() >= 1 ) { 
 							choosedDomino = d;
-							return k;
+							finalChoice = k;
 						}
 						else if (sameTypeZone(d,board,1) 
 								&& lagia.bestZone(board).get(1).getZone().size() > 2 
 								&& lagia.bestZone(board).get(1).getCrowns() >= 1 ) { 
 								choosedDomino = d;
-								return k;
+								finalChoice = k;
 						}						
 						else {
 							choosedDomino = d;
-							return k;
+							finalChoice = k;
 						}
 					}
 					else {
 						if (sameTypeZone(d,board,1)) {  
 							if (lagia.bestZone(board).get(1).getCrowns() >= 1 ) { 
 								choosedDomino = d;
-								return k;
+								finalChoice = k;
 							}
 							else {
 								choosedDomino = d;
-								return k;
+								finalChoice = k;
 							}
 						}
 					}

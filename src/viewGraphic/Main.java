@@ -29,7 +29,7 @@ public class Main extends Application {
 	}
 	
 	public static void keepGoing(int nbOrder) {
-		if (nbOrder == Model.order.length-1) {
+		if (nbOrder >= Model.order.length-1) {
 			if (!Model.deck.hasNext())
 				end();
 			else {
