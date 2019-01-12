@@ -29,7 +29,7 @@ public class Deck {
 				return d;
 			}
 		}
-		return null;
+		return new Domino(0,0,"","",0);
 	}
 	
 	public boolean hasNext() {

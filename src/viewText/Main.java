@@ -6,19 +6,24 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+
+import javafx.scene.paint.Color;
 import model.*;
+
 
 
 public class Main {
 	static Random ran = new Random();
 	static Scanner scan = new Scanner(System.in);
 	static List<Integer> coord=new ArrayList<>();
-	static Player lagia = new Player(1, "a", 5);
+	static Player lagia = new Player(1,Color.BLACK);
 	static int [] newOrder= new int[4];
+	static List<Integer> dc=new ArrayList<>();
 
 	
     public static void main(String[] args) {
     	Model.deck.importDeck();
+    	Model.deckTest.importDeck();
     	setupGame();
     	play();
 
@@ -50,7 +55,8 @@ public class Main {
     	Model.draw();
     	
     	//On affiche la pioche
-    	showDominos(Model.onBoardDominos);
+    	dc.add(0);
+    	showDominos(Model.onBoardDominos,dc);
     	
     	//On definit un ordre aleatoire pour le premier tour
     	Model.setRandomOrder();
@@ -58,12 +64,15 @@ public class Main {
     	//Chaque joueur choisit un domino
 
     	for (int i : Model.order) {
-    		int dc = dominoChoice(i);
+    		int d = dominoChoice(i,dc);
+    		dc.add(d);
     		for(int k=0; k< Model.order.length; k++) {
-    			if(Model.deck.getDomino(dc)==Model.onBoardDominos.get(k))
+    			if(Model.deck.getDomino(d)==Model.onBoardDominos.get(k))
     				newOrder[k]=i;
     		}
     	}
+    	dc.clear();
+    	dc.add(0);
 	}
     
     public static void nbPlayer() {
@@ -84,9 +93,9 @@ public class Main {
     }
     
     public static void colorChoice(int i){
-    	System.out.println("Joueur"+" " +(i+1)+" "+"quelle couleur voulez-vous ? (Rouge, Vert, Jaune, Bleu)");
-		String color = scan.nextLine();
-		Model.createPlayer(i, color);
+    	System.out.println("Joueur"+" " +(i+1)+" "+" comment vous appellez-vous ? (alex, paul...)");
+		String name = scan.nextLine();
+		Model.createPlayer(i, Color.BLUE, name,false);
 
     }
     
@@ -96,17 +105,42 @@ public class Main {
 				+ "Le deuxieme territoire est "+ d.getHalf(1).getType() +" avec "+ d.getHalf(1).getCrown() +" couronnes\n");
     }
     
-    public static void showDominos(ArrayList<Domino> dominos) {
+    public static void showDominos(ArrayList<Domino> dominos, List<Integer> dc) {
     	for(Domino d : dominos) {
-    		showDomino(d);
+    		if(dc.size()==1) {
+    			showDomino(d);
+    		}
+    		else {
+    			if(!dc.contains(d.getNumber())) {
+    				showDomino(d);	
+    			}
+    		}
     	}
     }
+    public static Domino getOnBoardDomino(int nbDomino) {
+		for (Domino dom : Model.onBoardDominos) {
+			if (dom.getNumber() == nbDomino) {
+				return dom;
+			}
+		}
+		return null;
+	}
     
-    public static int dominoChoice(int i) {
+    public static int dominoChoice(int i,List<Integer> dc) {
     	System.out.println("Joueur "+ (i+1) +" quelle domino choisissez vous ? (donner son numéro)");
     	int d=scan.nextInt();
     	scan.nextLine();
-    	return d;
+    	
+    	if(getOnBoardDomino(d)!=Model.deck.getDomino(d) || d>48) {
+    		return dominoChoice(i,dc);
+    	}
+    	else if(dc.contains(d)) {
+    		System.out.println("Ce domino à déja été choisi, veuillez en choisir un autre");
+    		return dominoChoice(i,dc);
+    	}
+    	else {
+        	return d;
+    	}
     }
     
     public static void getCoord(int i) {
@@ -159,44 +193,41 @@ public class Main {
 						Model.player[j].printBoard();
 						Domino d=Model.dominosPlaying.get(i);
 						showDomino(d);
-						//aide pour débuguer
-						System.out.println("tu peut le placer : " + Model.player[j].listPlacable(d));
-						dominoPlace(j,d);
+						//si le joueurs peut placer le domino on l'autorise à le placer sinon on passe au choix
+						
+							if(Model.player[j].listPlacable(d).size()!=0) {
+								dominoPlace(j,d);
+								coord.clear();
+							}
+							
 						
 //						montre les dominos suivant pour qu'il choisisse son prochain domino
 						
-						showDominos(Model.onBoardDominos);
-						int dc = dominoChoice(j);
-						System.out.println(Model.deck.getDomino(dc));
-						System.out.println(Model.dominosPlaying.get(j));
+						showDominos(Model.onBoardDominos,dc);
+						
+						int newDc =dominoChoice(j,dc);
+						dc.add(newDc);
 //						Recupere l'ordre du domino qu'il a choisi pour avoir l'ordre de jeu
 						
-							for(int k=0; k< Model.onBoardDominos.size(); k++) {
-								System.out.println(Model.deck.getDomino(dc)==Model.onBoardDominos.get(k));
-								if(Model.deck.getDomino(dc)==Model.onBoardDominos.get(k)) {
-									newOrder2[j]=Model.onBoardDominos.indexOf(Model.onBoardDominos.get(k));
+							for(Domino domino:Model.onBoardDominos) {
+								if(Model.deck.getDomino(newDc)==domino) {
+									newOrder2[Model.onBoardDominos.indexOf(domino)]=j;
 								}
 							}
 					}
 			}	
 				//met à jour l'ordre de jeu
-				System.out.println(newOrder2);
-				for(int z = 0; z < Model.onBoardDominos.size(); z++) {
-					newOrder[z]=newOrder2[z];
+					newOrder=newOrder2;
+					dc.clear();
+					dc.add(0);
 				}
-
+				//fin de la partie, on compte les points
+				System.out.println("La partie est finie  !!!");
+				for (Player p : Model.player) {
+					p.scoreBoard(p.board);
+					System.out.println("Score : " + p.totalScore);
+				}
 			
 		}
-
-		/*
-		 * pour chaque joueur
-		 *		 placer domino
-		*		 choisir dominos
-		*
-		*if (c'est fini)
-		*		compter les points
-		*		dire qui c'est qu'a gagnï¿½
-		 * piocher donimos
-		 */
 	}	
-}
+

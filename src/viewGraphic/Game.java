@@ -41,6 +41,8 @@ public class Game extends Parent {
 	
 
 	public static Scene gameView() {
+		root = new Group();
+		scene = new Scene(root, width, height+100);
 		cadre.setStroke(Color.BLACK);
 		cadre.setStrokeWidth(3);
 		mainPane = new BorderPane();

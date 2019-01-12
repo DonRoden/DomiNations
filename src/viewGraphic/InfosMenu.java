@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 
 public class InfosMenu extends Menu{
 	public InfosMenu() {
-		this.addTitle("Règles du jeu", 140);
+		this.addTitle("Règles du jeu", 300);
 		
 		Text infos = new Text();
 		
@@ -32,7 +32,8 @@ public class InfosMenu extends Menu{
 		finally {
 			sc.close();
 		}
-		
+		infos.setTranslateX(50);
+		infos.setTranslateY(100);
 		mainPane.setCenter(infos);
 		
 		Button retour = new Button("Retour");
@@ -42,7 +43,8 @@ public class InfosMenu extends Menu{
 				a.show(Main.primaryStage);
 			}
 		});
-		
+		retour.setTranslateX(500);
+		retour.setTranslateY(400);
 		mainPane.setBottom(retour);
 	}
 }

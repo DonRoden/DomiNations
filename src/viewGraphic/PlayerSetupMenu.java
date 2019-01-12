@@ -66,7 +66,7 @@ public class PlayerSetupMenu extends Menu{
 			public void handle(MouseEvent e) {
 				Model.setNbPlayer(nbPlayer);
 				for (int i = 0; i < nbPlayer; i++) {
-					if (Model.bigDuel)
+					if (Model.bigDuel && Model.player.length == 2)
 						Model.boardSize = 7;
 					boolean isIA = ((CheckBox)((VBox)((Group)playerGrid.getChildren().get(i)).getChildren().get(1)).getChildren().get(2)).isSelected();
 					Model.createPlayer(i, (Color)((Rectangle)((Group)playerGrid.getChildren().get(i)).getChildren().get(0)).getFill(), ((TextField)((VBox)((Group)playerGrid.getChildren().get(i)).getChildren().get(1)).getChildren().get(1)).getText(), isIA);
