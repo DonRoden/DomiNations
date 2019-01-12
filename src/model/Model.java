@@ -3,6 +3,8 @@ package model;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Comparator;
 import java.util.Random;
 import java.util.Scanner;
@@ -18,6 +20,9 @@ public class Model {
 	public static int[] order;
 	public static int[] newOrder;
 	public static Domino[] chosenDomino;
+	public static boolean isMiddleEmpire = false;
+	public static boolean isHarmony = false;
+	public static boolean bigDuel = false;
 	
 	static Random ran = new Random();
 	
@@ -62,6 +67,55 @@ public class Model {
 		if (isIA) {
 			player[i].ia = new Lagia(player[i]);
 		}
+	}
+	public static int finalScore(Player player) {
+		int finalScore = player.scoreBoard(player.board);
+		if (isMiddleEmpire && player.isCentered(player.board)) {
+			finalScore += 10;
+		}
+		if (isHarmony && player.isFull(player.board)) {
+			finalScore += 5;
+		}
+		return finalScore;
+	}
+	
+	public static List<Player> winner() {
+		List<Player> vainqueurs = new ArrayList<Player>();
+		vainqueurs.add(player[0]);
+		finalScore(player[0]);
+		for(int i = 1; i < player.length; i++) {
+			finalScore(player[i]);
+			if (player[i].scoreBoard(player[i].board) > vainqueurs.get(0).scoreBoard(vainqueurs.get(0).board)) {
+				vainqueurs = new ArrayList<Player>();
+				vainqueurs.add(player[i]);
+			}
+			else if (player[i].scoreBoard(player[i].board) == vainqueurs.get(0).scoreBoard(vainqueurs.get(0).board)) {
+				vainqueurs.add(player[i]);
+			}
+		}
+		if (vainqueurs.size() >= 2) {
+			for(int i = 1; i < vainqueurs.size(); i++) {
+				if (player[i].bestZone(player[i].board).get(0).getScore() 
+						> vainqueurs.get(0).bestZone(vainqueurs.get(0).board).get(0).getScore()) {
+					vainqueurs.remove(0);
+				}
+				if (player[i].bestZone(player[i].board).get(0).getScore() 
+						< vainqueurs.get(0).bestZone(vainqueurs.get(0).board).get(0).getScore()) {
+					vainqueurs.remove(i);
+				}
+			}
+			if (vainqueurs.size() >= 2) {
+				for(int i = 1; i < vainqueurs.size(); i++) {
+					if (player[i].numberCrowns() > vainqueurs.get(0).numberCrowns()) {
+						vainqueurs.remove(0);
+					}
+					if (player[i].numberCrowns() < vainqueurs.get(0).numberCrowns()) {
+						vainqueurs.remove(i);
+					}
+				}
+			}
+		}
+		return vainqueurs;
 	}
 	
 	public static void shuffleDeck() {
