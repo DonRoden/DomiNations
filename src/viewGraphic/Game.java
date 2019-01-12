@@ -449,7 +449,9 @@ public class Game extends Parent {
 				return new ImageView(new Image("img/prairie.jpg"));
 		}
 		else if (tile.getType().equals("Montagne")) {
-			if (tile.getCrown() == 2)
+			if (tile.getCrown() == 3)
+				return new ImageView(new Image("img/montagne3.jpg"));
+			else if (tile.getCrown() == 2)
 				return new ImageView(new Image("img/montagne2.jpg"));
 			else if (tile.getCrown() == 1)
 				return new ImageView(new Image("img/montagne1.jpg"));
@@ -457,9 +459,7 @@ public class Game extends Parent {
 				return new ImageView(new Image("img/montagne.jpg"));
 		}
 		else if (tile.getType().equals("Mine")) {
-			if (tile.getCrown() == 3)
-				return new ImageView(new Image("img/mine3.jpg"));
-			else if (tile.getCrown() == 2)
+			if (tile.getCrown() == 2)
 				return new ImageView(new Image("img/mine2.jpg"));
 			else if (tile.getCrown() == 1)
 				return new ImageView(new Image("img/mine1.jpg"));
