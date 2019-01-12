@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+
+import javafx.scene.paint.Color;
 import model.*;
 
 
@@ -14,7 +16,7 @@ public class Main {
 	static Random ran = new Random();
 	static Scanner scan = new Scanner(System.in);
 	static List<Integer> coord=new ArrayList<>();
-	static Player lagia = new Player(1, "a");
+	static Player lagia = new Player(1,Color.BLACK);
 	static int [] newOrder= new int[4];
 	static List<Integer> dc=new ArrayList<>();
 
@@ -62,9 +64,9 @@ public class Main {
     	//Chaque joueur choisit un domino
 
     	for (int i : Model.order) {
-    		int dc = dominoChoice(i);
+    		int d = dominoChoice(i,dc);
     		for(int k=0; k< Model.order.length; k++) {
-    			if(Model.deck.getDomino(dc)==Model.onBoardDominos.get(k))
+    			if(Model.deck.getDomino(d)==Model.onBoardDominos.get(k))
     				newOrder[k]=i;
     		}
     	}
@@ -90,7 +92,7 @@ public class Main {
     public static void colorChoice(int i){
     	System.out.println("Joueur"+" " +(i+1)+" "+" comment vous appellez-vous ? (alex, paul...)");
 		String name = scan.nextLine();
-		Model.createPlayer(i, "", name);
+		Model.createPlayer(i, Color.BLUE, name,false);
 
     }
     
@@ -121,15 +123,17 @@ public class Main {
 		return null;
 	}
     
-    public static int dominoChoice(int i) {
+    public static int dominoChoice(int i,List<Integer> dc) {
     	System.out.println("Joueur "+ (i+1) +" quelle domino choisissez vous ? (donner son numéro)");
     	int d=scan.nextInt();
     	scan.nextLine();
     	
     	if(getOnBoardDomino(d)!=Model.deck.getDomino(d) || d>48) {
-    		dominoChoice(i);
-    		return d;
-    		
+    		return dominoChoice(i,dc);
+    	}
+    	else if(dc.contains(d)) {
+    		System.out.println("Ce domino à déja été choisi, veuillez en choisir un autre");
+    		return dominoChoice(i,dc);
     	}
     	else {
         	return d;
@@ -198,7 +202,7 @@ public class Main {
 						
 						showDominos(Model.onBoardDominos,dc);
 						
-						int newDc =dominoChoice(j);
+						int newDc =dominoChoice(j,dc);
 						dc.add(newDc);
 //						Recupere l'ordre du domino qu'il a choisi pour avoir l'ordre de jeu
 						
