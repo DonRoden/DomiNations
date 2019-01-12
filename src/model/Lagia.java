@@ -83,7 +83,7 @@ public class Lagia {
 			choosedPosition = maxScore(domino).get(0);
 		}
 		else {
-			
+			choosedPosition = null;
 		}
 	}
 	public boolean sameTypeZone(Domino domino,HalfDomino[][] board,int zone) {
@@ -120,7 +120,7 @@ public class Lagia {
 	public List<int[]> maxScore(Domino domino) {
 		List<Integer> listScores = new ArrayList<Integer>();
 		List<int[]> listPosMaxScore = new ArrayList<int[]>();
-		for (int i = 1; i < listPlacable(domino).size(); i++) {
+		for (int i = 0; i < listPlacable(domino).size(); i++) {
 			int[] testPosition = listPlacable(domino).get(i);
 			int x1 = testPosition[0];
 			int y1 = testPosition[1];

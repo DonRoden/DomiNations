@@ -122,7 +122,10 @@ public class Model {
 	}
 
 	public static void shuffleDeck() {
-		deck.shuffle(12*player.length);
+		if (bigDuel && player.length == 2)
+			deck.shuffle(48);
+		else
+			deck.shuffle(12*player.length);
 	}
 
 	public static void draw() {
