@@ -95,21 +95,21 @@ public class Model {
 		}
 		if (vainqueurs.size() >= 2) {
 			for(int i = 1; i < vainqueurs.size(); i++) {
-				if (player[i].bestZone(player[i].board).get(0).getScore()
+				if (vainqueurs.get(i).bestZone(vainqueurs.get(i).board).get(0).getScore()
 						> vainqueurs.get(0).bestZone(vainqueurs.get(0).board).get(0).getScore()) {
 					vainqueurs.remove(0);
 				}
-				if (player[i].bestZone(player[i].board).get(0).getScore()
+				if (vainqueurs.get(i).bestZone(vainqueurs.get(i).board).get(0).getScore()
 						< vainqueurs.get(0).bestZone(vainqueurs.get(0).board).get(0).getScore()) {
 					vainqueurs.remove(i);
 				}
 			}
 			if (vainqueurs.size() >= 2) {
 				for(int i = 1; i < vainqueurs.size(); i++) {
-					if (player[i].numberCrowns() > vainqueurs.get(0).numberCrowns()) {
+					if (vainqueurs.get(i).numberCrowns() > vainqueurs.get(0).numberCrowns()) {
 						vainqueurs.remove(0);
 					}
-					if (player[i].numberCrowns() < vainqueurs.get(0).numberCrowns()) {
+					if (vainqueurs.get(i).numberCrowns() < vainqueurs.get(0).numberCrowns()) {
 						vainqueurs.remove(i);
 					}
 				}

@@ -41,14 +41,14 @@ public class Lagia {
 					else if (oneCrown(d)) {
 							
 						if (sameTypeZone(d,board,0) 
-							&& lagia.bestZone(board).get(0).getZone().size() > 2 
-							&& lagia.bestZone(board).get(0).getCrowns() >= 1 ) { 
+							&& (lagia.bestZone(board).get(0).getZone().size() > 2 
+							|| lagia.bestZone(board).get(0).getCrowns() >= 1 )) { 
 							choosedDomino = d;
 							finalChoice = k;
 						}
 						else if (sameTypeZone(d,board,1) 
-								&& lagia.bestZone(board).get(1).getZone().size() > 2 
-								&& lagia.bestZone(board).get(1).getCrowns() >= 1 ) { 
+								&& (lagia.bestZone(board).get(1).getZone().size() > 2 
+								|| lagia.bestZone(board).get(1).getCrowns() >= 1 )) { 
 								choosedDomino = d;
 								finalChoice = k;
 						}						
