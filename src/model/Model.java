@@ -1,6 +1,8 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Comparator;
 import java.util.Random;
 
@@ -21,27 +23,27 @@ public class Model {
 	public static boolean isMiddleEmpire = false;
 	public static boolean isHarmony = false;
 	public static boolean bigDuel = false;
-	
+
 	static Random ran = new Random();
-	
-	/* Quand on creer une nouvelle variable, toujours se demander 
+
+	/* Quand on creer une nouvelle variable, toujours se demander
 	 * ou on va l'utiliser apres et instancer la variable au bon endroit
 	 * Toutes les variables au dessus sont utiles dans l'ensemble du projet
 	 * donc elles sont publiques.
 	 * Mais certaines variables ne sont que temporaires
 	 * pour une fonction par exemple, dans ce cas seulement, on la definit dans la fonction
 	 */
-	
-	
-	
+
+
+
 	/* Meme pas besoin de main dans Model,
 	 * ce fichier ne sert qu'a definir les fonction dont on aura besoin
 	 * afin de s'en servir facilement.
 	 * On definit les details pour que dans view, il ne reste qu'a :
 	 * Creer le deck, piocher, melanger etc...
 	 * Mais dans le view, les appels de fonctions sont simples
-	 * 
-	 * 
+	 *
+	 *
 	 * L'idee c'est de se dire que si jamais j'ai envie de faire
 	 * un autre jeu de dominos avec ce genre de pieces, j'aurai pas a reecrire
 	 * les fonctions. J'aurai juste a definir un plateau different, des donnees
@@ -58,7 +60,7 @@ public class Model {
 		newOrder = new int[nbKings];
 		chosenDomino = new Domino[nbKings];
 	}
-	
+
 	public static void createPlayer(int i, Color color, String name, boolean isIA) {
 		player[i] = new Player(kingPerPlayer, color);
 		player[i].name = name;
@@ -66,11 +68,60 @@ public class Model {
 			player[i].ia = new Lagia(player[i]);
 		}
 	}
-	
+	public static int finalScore(Player player) {
+		int finalScore = player.scoreBoard(player.board);
+		if (isMiddleEmpire && player.isCentered(player.board)) {
+			finalScore += 10;
+		}
+		if (isHarmony && player.isFull(player.board)) {
+			finalScore += 5;
+		}
+		return finalScore;
+	}
+
+	public static List<Player> winner() {
+		List<Player> vainqueurs = new ArrayList<Player>();
+		vainqueurs.add(player[0]);
+		finalScore(player[0]);
+		for(int i = 1; i < player.length; i++) {
+			finalScore(player[i]);
+			if (player[i].scoreBoard(player[i].board) > vainqueurs.get(0).scoreBoard(vainqueurs.get(0).board)) {
+				vainqueurs = new ArrayList<Player>();
+				vainqueurs.add(player[i]);
+			}
+			else if (player[i].scoreBoard(player[i].board) == vainqueurs.get(0).scoreBoard(vainqueurs.get(0).board)) {
+				vainqueurs.add(player[i]);
+			}
+		}
+		if (vainqueurs.size() >= 2) {
+			for(int i = 1; i < vainqueurs.size(); i++) {
+				if (player[i].bestZone(player[i].board).get(0).getScore()
+						> vainqueurs.get(0).bestZone(vainqueurs.get(0).board).get(0).getScore()) {
+					vainqueurs.remove(0);
+				}
+				if (player[i].bestZone(player[i].board).get(0).getScore()
+						< vainqueurs.get(0).bestZone(vainqueurs.get(0).board).get(0).getScore()) {
+					vainqueurs.remove(i);
+				}
+			}
+			if (vainqueurs.size() >= 2) {
+				for(int i = 1; i < vainqueurs.size(); i++) {
+					if (player[i].numberCrowns() > vainqueurs.get(0).numberCrowns()) {
+						vainqueurs.remove(0);
+					}
+					if (player[i].numberCrowns() < vainqueurs.get(0).numberCrowns()) {
+						vainqueurs.remove(i);
+					}
+				}
+			}
+		}
+		return vainqueurs;
+	}
+
 	public static void shuffleDeck() {
 		deck.shuffle(12*player.length);
 	}
-	
+
 	public static void draw() {
 		onBoardDominos = new ArrayList<Domino>();
 		for(int i = 0; i < nbKings; i++) {
@@ -78,11 +129,11 @@ public class Model {
 		}
 		onBoardDominos.sort(Comparator.comparing(Domino::getNumber));
 	}
-	
+
 	public static void setRandomOrder() {
 		ArrayList<Integer> list = new ArrayList<>();
 		for (int timesToRepeat = 0; timesToRepeat < kingPerPlayer; timesToRepeat++) {
-			/*On la repete : 
+			/*On la repete :
 			 * 1 seul fois si 3 ou 4 joueurs
 			 * 2 fois si 2 joueurs
 			 */
@@ -99,11 +150,11 @@ public class Model {
 		 * list = 0,1,2 si 3 joueurs
 		 * list = 0,1,2,3 si 4 joueurs
 		 */
-		
-		/* C'est ce genre de choses dont je parle quand je dis 
-		 * qu'il faut réfléchir plus pour simplifier les conditions
+
+		/* C'est ce genre de choses dont je parle quand je dis
+		 * qu'il faut rï¿½flï¿½chir plus pour simplifier les conditions
 		 * au lieu de ca :
-		 
+
 		if(nbPlayer==2) {
 			list.add(1);
 			list.add(1);

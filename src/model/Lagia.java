@@ -41,14 +41,14 @@ public class Lagia {
 					else if (oneCrown(d)) {
 							
 						if (sameTypeZone(d,board,0) 
-							&& bestZone(board).get(0).getZone().size() > 2 
-							&& bestZone(board).get(0).getCrowns() >= 1 ) { 
+							&& lagia.bestZone(board).get(0).getZone().size() > 2 
+							&& lagia.bestZone(board).get(0).getCrowns() >= 1 ) { 
 							choosedDomino = d;
 							return k;
 						}
 						else if (sameTypeZone(d,board,1) 
-								&& bestZone(board).get(1).getZone().size() > 2 
-								&& bestZone(board).get(1).getCrowns() >= 1 ) { 
+								&& lagia.bestZone(board).get(1).getZone().size() > 2 
+								&& lagia.bestZone(board).get(1).getCrowns() >= 1 ) { 
 								choosedDomino = d;
 								return k;
 						}						
@@ -59,7 +59,7 @@ public class Lagia {
 					}
 					else {
 						if (sameTypeZone(d,board,1)) {  
-							if (bestZone(board).get(1).getCrowns() >= 1 ) { 
+							if (lagia.bestZone(board).get(1).getCrowns() >= 1 ) { 
 								choosedDomino = d;
 								return k;
 							}
@@ -87,8 +87,8 @@ public class Lagia {
 		}
 	}
 	public boolean sameTypeZone(Domino domino,HalfDomino[][] board,int zone) {
-		if (domino.getHalf(0).getType() == bestZone(board).get(zone).getType()
-			|| domino.getHalf(1).getType() == bestZone(board).get(zone).getType()) {
+		if (domino.getHalf(0).getType() == lagia.bestZone(board).get(zone).getType()
+			|| domino.getHalf(1).getType() == lagia.bestZone(board).get(zone).getType()) {
 			return true;	
 		} 
 		else {
@@ -116,23 +116,6 @@ public class Lagia {
 	// si il y a des dominos à +2 couronnes dans la seconde liste prendre le premier 
 	// (si il y en a pas dans la première)
 
-	
-	
-	public List<Zone> bestZone(HalfDomino[][] board) {
-		List<Zone> listZone = new ArrayList<Zone>();
-		
-		for (int i = 0; i <Player.size*2-1; i++) {
-			for (int j = 0; j<Player.size*2-1; j++) {
-				Zone zone = new Zone(j,i,board);
-				int score = zone.scoreZone(j,i,board);
-				
-					listZone.add(zone);
-				
-			}
-		}
-		Collections.sort(listZone,Collections.reverseOrder());
-		return listZone;
-	}
 	
 	public List<int[]> maxScore(Domino domino) {
 		List<Integer> listScores = new ArrayList<Integer>();

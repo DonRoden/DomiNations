@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javafx.scene.paint.Color;
@@ -242,6 +243,30 @@ public class Player {
 			}
 		}
 		return full;
+	}
+	
+	public List<Zone> bestZone(HalfDomino[][] board) {
+		List<Zone> listZone = new ArrayList<Zone>();
+		
+		for (int i = 0; i <Player.size*2-1; i++) {
+			for (int j = 0; j<Player.size*2-1; j++) {
+				Zone zone = new Zone(j,i,board);
+				zone.scoreZone(j,i,board);
+				listZone.add(zone);
+			}
+		}
+		Collections.sort(listZone,Collections.reverseOrder());
+		return listZone;
+	}
+	
+	public int numberCrowns() {
+		int numberCrowns = 0;
+		for (int i = 0; i <size*2-1; i++) {
+			for (int j = 0; j<size*2-1; j++) {
+				numberCrowns += board[i][j].getCrown();
+			}
+		}
+		return numberCrowns;
 	}
 	
 	public HalfDomino[][] getBoard() {
