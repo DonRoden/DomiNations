@@ -420,14 +420,28 @@ public class Game extends Parent {
 		
 		System.out.println("Exiting newTurn\n");
 	}
-	
 	static ImageView showCase(HalfDomino tile) {
 		return showCase(tile, new Player(0,Color.WHITE));
 	}
 	
 	static ImageView showCase(HalfDomino tile, Player player) {
 		if (tile.getType().equals("Castle")) {
-			return new ImageView(new Image("img/chateau.jpg"));
+			if (player.color == Color.CORNFLOWERBLUE) {
+				return new ImageView(new Image("img/chateaubleu.jpg"));
+			}
+			if (player.color == Color.HOTPINK) {
+				return new ImageView(new Image("img/chateaurose.jpg"));
+			}
+			if (player.color == Color.SEAGREEN) {
+				return new ImageView(new Image("img/chateauvert.jpg"));
+			}
+			if (player.color == Color.CHOCOLATE) {
+				return new ImageView(new Image("img/chateauorange.jpg"));
+			}
+			else {
+				return new ImageView(new Image("img/chateau.jpg"));
+			}
+			
 		}
 		else if (tile.getType().equals("Champs")) {
 			if (tile.getCrown() == 1)
@@ -456,7 +470,9 @@ public class Game extends Parent {
 				return new ImageView(new Image("img/prairie.jpg"));
 		}
 		else if (tile.getType().equals("Montagne")) {
-			if (tile.getCrown() == 2)
+			if (tile.getCrown() == 3)
+				return new ImageView(new Image("img/montagne3.jpg"));
+			else if (tile.getCrown() == 2)
 				return new ImageView(new Image("img/montagne2.jpg"));
 			else if (tile.getCrown() == 1)
 				return new ImageView(new Image("img/montagne1.jpg"));
@@ -464,9 +480,7 @@ public class Game extends Parent {
 				return new ImageView(new Image("img/montagne.jpg"));
 		}
 		else if (tile.getType().equals("Mine")) {
-			if (tile.getCrown() == 3)
-				return new ImageView(new Image("img/mine3.jpg"));
-			else if (tile.getCrown() == 2)
+			if (tile.getCrown() == 2)
 				return new ImageView(new Image("img/mine2.jpg"));
 			else if (tile.getCrown() == 1)
 				return new ImageView(new Image("img/mine1.jpg"));
