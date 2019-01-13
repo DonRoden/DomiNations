@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import model.HalfDomino;
 import model.Lagia;
@@ -69,6 +70,7 @@ public class Game extends Parent {
 			domino.getChildren().addAll(half1, half2);
 			box.getChildren().add(domino);
 			previousTurn.getChildren().add(box);
+
 			Model.chosenDomino[i] = Model.onBoardDominos.get(i);
 		}
 		pioches.getChildren().add(previousTurn);
@@ -77,6 +79,7 @@ public class Game extends Parent {
 		pioches.getChildren().add(infoToDo);
 		infoToDo.setWrappingWidth(200);
 		infoToDo.prefHeight(50);
+		infoToDo.setFont(new Font(20));
 		
 		Model.draw();
 		nextTurn = new VBox();
@@ -104,7 +107,6 @@ public class Game extends Parent {
 	}
 	
 	public static GridPane showBoard(int idPlayer, double size) {
-		System.out.println("Entering showBoard");
 		GridPane grid = new GridPane();
 		
 		HalfDomino[][] board = Model.player[idPlayer].getBoard();
@@ -124,12 +126,10 @@ public class Game extends Parent {
 			}
 		}
 		
-		System.out.println("Exiting showBoard\n");
 		return grid;
 	}
 	
 	public static void clickableBoard(GridPane grid, int nbOrder) {
-		System.out.println("Entering clickableBoard");
 		
 		infoToDo.setText("<- Placez la première partie du domino");
 		
@@ -184,12 +184,13 @@ public class Game extends Parent {
 											gridCase.setOnMouseEntered(null);
 										}
 										
-										change(grid, nbOrder, sizePlayer*2/13);
-										chooseDomino(nbOrder);
+										change(grid, nbOrder);
+										chooseDomino(nbOrder, Model.lastTurn);
 									}
 									else {
+										rec.setOpacity(0.3);
 										rec.setVisible(false);
-										clickableBoard(grid, idPlayer);
+										clickableBoard(grid, nbOrder);
 									}
 								}
 							});
@@ -213,31 +214,38 @@ public class Game extends Parent {
 			});
 		}
 		
-		System.out.println("Exiting clickableBoard\n");
 	}
 	
-	public static void change(GridPane old, int nbOrder, double size) {
-		mainBoard.getChildren().set(2, Game.showBoard(Model.order[nbOrder], size));
+	public static void change(GridPane old, int nbOrder) {
+		double sizeCase;
+		if (Model.bigDuel && Model.player.length == 2)
+			sizeCase = 19;
+		else
+			sizeCase = 13;
+		mainBoard.getChildren().set(2, Game.showBoard(Model.order[nbOrder], height/sizeCase));
 	}
 	
-	public static void chooseDomino(int nbOrder) {
-		System.out.println("Entering chooseDomino");
+	public static void chooseDomino(int nbOrder, boolean lastTurn) {
 		
 		Model.player[Model.order[nbOrder]].scoreBoard(Model.player[Model.order[nbOrder]].board);
 		mainPoints.setText("Points : "+Model.player[Model.order[nbOrder]].totalScore);
 		
-		if (Model.player[Model.order[nbOrder]].listPlacable(Model.chosenDomino[nbOrder]).isEmpty()) {
-			infoToDo.setText("Vous ne pouvez pas placer ce domino.\n"
-					+ "Choisissez un autre domino ->");
+		if (lastTurn) {
+			Group group = (Group)previousTurn.getChildren().get(nbOrder);
+			group.getChildren().remove(cadre);
+			if (nbOrder >= Model.order.length-1)
+				Main.end();
+			else
+				Main.keepGoing(nbOrder);
 		}
-		else
-			infoToDo.setText("Choisissez un domino ->");
-		
-		
-			for (int i : Model.newOrder) {
-				System.out.println(i);
+		else {
+			if (Model.player[Model.order[nbOrder]].listPlacable(Model.chosenDomino[nbOrder]).isEmpty()) {
+				infoToDo.setText("Vous ne pouvez pas placer ce domino.\n"
+						+ "Choisissez un autre domino ->");
 			}
-			
+			else
+				infoToDo.setText("Choisissez un domino ->");
+		
 			for (Node box : nextTurn.getChildren()) {
 				double size = sizeKing/4;
 				Rectangle rec = new Rectangle(size*2, size, Color.LIGHTGRAY);
@@ -259,7 +267,7 @@ public class Game extends Parent {
 				
 				box.setOnMouseClicked(new EventHandler<MouseEvent>() {
 					public void handle(MouseEvent e) {
-	//					System.out.println(Model.newOrder[nextTurn.getChildren().indexOf(e.getSource())]);
+	//					(Model.newOrder[nextTurn.getChildren().indexOf(e.getSource())]);
 						if(Model.newOrder[nextTurn.getChildren().indexOf(e.getSource())] == -1) {
 							for (Node toRemove : nextTurn.getChildren()) {
 								toRemove.setOnMouseEntered(null);
@@ -279,41 +287,14 @@ public class Game extends Parent {
 						}
 					}
 				});
+			}
 		}
 		
-		System.out.println("Exiting chooseDomino\n");
+
 	}
 	
 	public static void iaChooseDomino(int nbOrder) {
-		Lagia ia = Model.player[Model.order[nbOrder]].ia;
-		double size = sizeKing/4;
-		for (int i : Model.newOrder) {
-			System.out.println(i);
-		}
-		int a = ia.chooseDomino(Model.onBoardDominos);
-		System.out.println("IA : " + Model.player[Model.order[nbOrder]] + " Domino " + ia.choosedDomino);
-		Model.newOrder[a] = Model.order[nbOrder];
-		System.out.println("choosed " + a);
-		for (int i : Model.newOrder) {
-			System.out.println(i);
-		}
-		
-		Node box = ((Node)nextTurn.getChildren().get(a));
-		Rectangle black = new Rectangle(size*2, size, Color.RED);
-		black.setOpacity(0.5);
-		
-		((Group)box).getChildren().add(black);
-		
-		Main.keepGoing(nbOrder);
-	}
-	
-	public static void placeDomino(int nbOrder) {
-		placeDomino(nbOrder, true);
-	}
-	
-	public static void placeDomino(int nbOrder, boolean clickable) {
-		System.out.println("Entering placeDomino");
-		System.out.println("Player " + Model.order[nbOrder]);
+
 		
 		double sizeCase;
 		if (Model.bigDuel && Model.player.length == 2)
@@ -322,6 +303,114 @@ public class Game extends Parent {
 			sizeCase = 13;
 		GridPane board = Game.showBoard(Model.order[nbOrder], height/sizeCase);
 		mainBoard = new VBox();	
+		playerName = new Text(Model.player[Model.order[nbOrder]].name);
+		playerName.setTranslateX(75);
+		playerName.setFill(Model.player[Model.order[nbOrder]].color);
+		mainPoints.setText("Points : " + Model.player[Model.order[nbOrder]].totalScore);
+		mainPoints.setTranslateX(75);
+		mainBoard.getChildren().add(playerName);
+		mainBoard.getChildren().add(mainPoints);
+		mainBoard.getChildren().add(board);
+		Group group = (Group)previousTurn.getChildren().get(nbOrder);
+		cadre.setStroke(Model.player[Model.order[nbOrder]].color);
+		group.getChildren().add(cadre);
+		
+		sidePanel = new VBox();
+		for (int i = 0; i < Model.player.length; i++) {
+			if (i != Model.order[nbOrder]) {
+				Model.player[i].scoreBoard(Model.player[i].board);
+				Text name = new Text(Model.player[i].name);
+				name.setTranslateX(15);
+				Text points = new Text("Points : "+Model.player[i].totalScore);
+				points.setTranslateX(15);
+				name.setFill(Model.player[i].color);
+				sidePanel.getChildren().add(name);
+				sidePanel.getChildren().add(points);
+				GridPane side = Game.showBoard(i, sizePlayer/(sizeCase-4));
+				sidePanel.getChildren().add(side);
+			}
+		}
+		sidePanel.setTranslateY(-200);
+		
+		mainPane.setRight(sidePanel);
+		mainPane.setCenter(mainBoard);
+		
+		if (!Model.lastTurn) {
+			Lagia ia = Model.player[Model.order[nbOrder]].ia;
+			double size = sizeKing/4;
+			int a = ia.chooseDomino(Model.onBoardDominos);
+			Model.newOrder[a] = Model.order[nbOrder];
+			
+			Node box = ((Node)nextTurn.getChildren().get(a));
+			Rectangle black = new Rectangle(size*2, size, Color.RED);
+			black.setOpacity(0.5);
+			
+			((Group)box).getChildren().add(black);
+			
+			infoToDo.setText(Model.player[Model.order[nbOrder]].name + " a joué, cliquez ici pour continuer");
+			
+			infoToDo.setOnMouseClicked(new EventHandler<MouseEvent>() {
+				public void handle(MouseEvent e) {
+					Group group = (Group)previousTurn.getChildren().get(nbOrder);
+					group.getChildren().remove(cadre);
+					infoToDo.setOnMouseClicked(null);
+					Main.keepGoing(nbOrder);
+				}
+			});
+		}
+		else {
+			if (nbOrder >= Model.order.length-1) {
+				infoToDo.setText(Model.player[Model.order[nbOrder]].name + " a joué, cliquez ici pour continuer");
+				
+				infoToDo.setOnMouseClicked(new EventHandler<MouseEvent>() {
+					public void handle(MouseEvent e) {
+						Group group = (Group)previousTurn.getChildren().get(nbOrder);
+						group.getChildren().remove(cadre);
+						infoToDo.setOnMouseClicked(null);
+						Main.end();
+					}
+				});
+			}
+			else {
+				infoToDo.setText(Model.player[Model.order[nbOrder]].name + " a joué, cliquez ici pour continuer");
+				
+				infoToDo.setOnMouseClicked(new EventHandler<MouseEvent>() {
+					public void handle(MouseEvent e) {
+						Group group = (Group)previousTurn.getChildren().get(nbOrder);
+						group.getChildren().remove(cadre);
+						infoToDo.setOnMouseClicked(null);
+						Main.keepGoing(nbOrder);
+					}
+				});
+			}
+		}
+	}
+	
+	public static void placeDomino(int nbOrder) {
+		placeDomino(nbOrder, true, false);
+	}
+	
+	public static void placeDomino(int nbOrder, boolean clickable) {
+		placeDomino(nbOrder, clickable, false);
+	}
+	
+	public static void placeDomino(int nbOrder, boolean clickable, boolean lastTurn) {
+
+		
+		double sizeCase;
+		if (Model.bigDuel && Model.player.length == 2)
+			sizeCase = 19;
+		else
+			sizeCase = 13;
+		GridPane board = Game.showBoard(Model.order[nbOrder], height/sizeCase);
+		mainBoard = new VBox();	
+		playerName = new Text(Model.player[Model.order[nbOrder]].name);
+		playerName.setTranslateX(75);
+		playerName.setFill(Model.player[Model.order[nbOrder]].color);
+		mainPoints.setText("Points : " + Model.player[Model.order[nbOrder]].totalScore);
+		mainPoints.setTranslateX(75);
+		mainBoard.getChildren().add(playerName);
+		mainBoard.getChildren().add(mainPoints);
 		
 		
 		if (Model.player[Model.order[nbOrder]].listPlacable(Model.chosenDomino[nbOrder]).isEmpty())
@@ -329,11 +418,10 @@ public class Game extends Parent {
 			Group group = (Group)previousTurn.getChildren().get(nbOrder);
 			cadre.setStroke(Model.player[Model.order[nbOrder]].color);
 			group.getChildren().add(cadre);
-			clickableBoard(board, nbOrder);
-			chooseDomino(nbOrder);
+			chooseDomino(nbOrder, lastTurn);
 		}
 		else if (!clickable)
-			chooseDomino(nbOrder);
+			chooseDomino(nbOrder, lastTurn);
 		else {
 			Group group = (Group)previousTurn.getChildren().get(nbOrder);
 			cadre.setStroke(Model.player[Model.order[nbOrder]].color);
@@ -345,13 +433,7 @@ public class Game extends Parent {
 		
 		
 		
-		playerName = new Text(Model.player[Model.order[nbOrder]].name);
-		playerName.setTranslateX(75);
-		playerName.setFill(Model.player[Model.order[nbOrder]].color);
-		mainPoints.setText("Points : " + Model.player[Model.order[nbOrder]].totalScore);
-		mainPoints.setTranslateX(75);
-		mainBoard.getChildren().add(playerName);
-		mainBoard.getChildren().add(mainPoints);
+		
 		mainBoard.getChildren().add(board);
 		
 		sidePanel = new VBox();
@@ -374,22 +456,24 @@ public class Game extends Parent {
 		mainPane.setRight(sidePanel);
 		mainPane.setCenter(mainBoard);
 		
-		System.out.println("Exiting placeDomino\n");
+
 	}
 	
 	public static void iaPlaceDomino(int nbOrder) {
 		Lagia ia = Model.player[Model.order[nbOrder]].ia;
 		ia.choosePosition(Model.chosenDomino[nbOrder]);
+		if (ia.choosedPosition != null) {
 		Model.player[Model.order[nbOrder]].placeDomino(ia.choosedPosition[0], 
 				ia.choosedPosition[1],
 				ia.choosedPosition[2],
 				ia.choosedPosition[3],
 				Model.chosenDomino[nbOrder]);
+		}
 		iaChooseDomino(nbOrder);
 	}
 	
-	public static void newTurn() {
-		System.out.println("Entering newTurn");
+	public static void newTurn(boolean notLastTurn) {
+
 		
 		double size = sizeKing/4;
 		for (int i = 0; i < previousTurn.getChildren().size(); i++) {
@@ -404,22 +488,26 @@ public class Game extends Parent {
 			Model.chosenDomino[i] = Model.onBoardDominos.get(i);
 		}
 		
-		Model.draw();
-		for (int i = 0; i < nextTurn.getChildren().size(); i++) {
-			Group children = ((Group)nextTurn.getChildren().get(i));
-			children.getChildren().remove(1, children.getChildren().size());
-			ImageView half1 = Game.showCase(Model.onBoardDominos.get(i).getHalf(0));
-			half1.setFitHeight(size);
-			half1.setFitWidth(size);
-			ImageView half2 = Game.showCase(Model.onBoardDominos.get(i).getHalf(1));
-			half2.setFitHeight(size);
-			half2.setFitWidth(size);
-			((HBox)((Group)nextTurn.getChildren().get(i)).getChildren().get(0)).getChildren().set(0, half1);
-			((HBox)((Group)nextTurn.getChildren().get(i)).getChildren().get(0)).getChildren().set(1, half2);
+		if (notLastTurn) {
+			Model.draw();
+			for (int i = 0; i < nextTurn.getChildren().size(); i++) {
+				Group children = ((Group)nextTurn.getChildren().get(i));
+				children.getChildren().remove(1, children.getChildren().size());
+				ImageView half1 = Game.showCase(Model.onBoardDominos.get(i).getHalf(0));
+				half1.setFitHeight(size);
+				half1.setFitWidth(size);
+				ImageView half2 = Game.showCase(Model.onBoardDominos.get(i).getHalf(1));
+				half2.setFitHeight(size);
+				half2.setFitWidth(size);
+				((HBox)((Group)nextTurn.getChildren().get(i)).getChildren().get(0)).getChildren().set(0, half1);
+				((HBox)((Group)nextTurn.getChildren().get(i)).getChildren().get(0)).getChildren().set(1, half2);
+			}
 		}
-		
-		System.out.println("Exiting newTurn\n");
+		else {
+			nextTurn.setOpacity(0);
+		}
 	}
+	
 	static ImageView showCase(HalfDomino tile) {
 		return showCase(tile, new Player(0,Color.WHITE));
 	}

@@ -120,7 +120,6 @@ public class Player {
 			fillBoard(x1,y1,x2,y2);
 		}
 		else {
-			System.out.println("Vous ne pouvez pas placer cette piece ici");
 		}
 	}
 

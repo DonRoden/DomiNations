@@ -42,19 +42,16 @@ public class Main extends Application {
 	
 	public static void keepGoing(int nbOrder) {
 		if (nbOrder >= Model.order.length-1) {
-			if (!Model.deck.hasNext())
-				end();
-			else {
+			Model.lastTurn = !Model.deck.hasNext();
 				for (int i = 0; i < Model.newOrder.length; i++) {
 					Model.order[i] = Model.newOrder[i];
 					Model.newOrder[i] = -1;
 				}
-				Game.newTurn();
+				Game.newTurn(!Model.lastTurn);
 				if (Model.player[Model.order[0]].ia != null)
 					Game.iaPlaceDomino(0);
 				else	
-					Game.placeDomino(0);
-			}
+					Game.placeDomino(0, true, Model.lastTurn);
 		}
 		else {
 			if (Model.chosenDomino[nbOrder].getNumber() == 0) {
@@ -68,7 +65,7 @@ public class Main extends Application {
 				if (Model.player[Model.order[nbOrder+1]].ia != null)
 					Game.iaPlaceDomino(nbOrder+1);
 				else {
-					Game.placeDomino(nbOrder+1);
+					Game.placeDomino(nbOrder+1, true, Model.lastTurn);
 				}
 			}
 		}
@@ -83,15 +80,15 @@ public class Main extends Application {
 	    for (int i = 0; i < Model.newOrder.length; i++) {
 			Model.newOrder[i] = -1;
 			Model.onBoardDominos.add(new Domino(0,0,"X","X",0));
-			Model.deck.add(0,0,"X","X",0);
 		}
 	    
         Scene scene = Game.gameView();
+        primaryStage.setScene(scene);
         if (Model.player[Model.order[0]].ia == null)
         	Game.placeDomino(0, false);
         else
         	Game.iaChooseDomino(0);
-        primaryStage.setScene(scene);
+        
 	}
 	
 	public static void end() {
