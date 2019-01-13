@@ -76,6 +76,7 @@ public class Main extends Application {
 	    Model.shuffleDeck();
 	    Model.setRandomOrder();
 	    Model.onBoardDominos = new ArrayList<>();
+	    Model.lastTurn = false;
 	    
 	    for (int i = 0; i < Model.newOrder.length; i++) {
 			Model.newOrder[i] = -1;
