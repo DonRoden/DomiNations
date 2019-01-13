@@ -10,7 +10,6 @@ import javafx.scene.paint.Color;
 
 public class Model {
 	public static Deck deck = new Deck();
-	public static Deck deckTest = new Deck();
 	public static Player[] player;
 	public static int nbKings;
 	public static int boardSize = 5;
