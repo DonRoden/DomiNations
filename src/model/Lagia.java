@@ -34,9 +34,15 @@ public class Lagia {
 			if (Model.newOrder[k] == -1) {
 				Domino d = onBoardDominos.get(k);
 				if (listPlacable(d).size()>0) { // on teste si il y a des dominos placables
-					if (twoCrowns(d)) {			// prendre le domino si il a plus d'une couronne
-						choosedDomino = d;
-						return k;
+					if (twoCrowns(d)) { // prendre le domino si il a plus d'une couronne
+						if (sameTypeZone(d,board,0)) {
+							choosedDomino = d;
+							return k;
+						}
+						else {
+							choosedDomino = d;
+							finalChoice = k;
+						}
 					}
 					else if (oneCrown(d)) {
 							
@@ -44,7 +50,7 @@ public class Lagia {
 							&& (lagia.bestZone(board).get(0).getZone().size() > 2 
 							|| lagia.bestZone(board).get(0).getCrowns() >= 1 )) { 
 							choosedDomino = d;
-							finalChoice = k;
+							return k;
 						}
 						else if (sameTypeZone(d,board,1) 
 								&& (lagia.bestZone(board).get(1).getZone().size() > 2 
@@ -126,7 +132,7 @@ public class Lagia {
 			int y1 = testPosition[1];
 			int x2 = testPosition[2];
 			int y2 = testPosition[3];
-			HalfDomino[][] testBoard = test.board;
+			HalfDomino[][] testBoard = lagia.board;
 			test.placeDomino(x1,y1,x2,y2,domino);
 			test.scoreBoard(testBoard);
 			listScores.add(test.totalScore);

@@ -56,7 +56,6 @@ public class Zone implements Comparable<Zone>{
 	}
 	
 	public int scoreZone(int x, int y, HalfDomino[][] board) {
-
 		zone = findZone(x, y, board);
 		for (int i = 0; i<zone.size(); i++) {
 			crowns += zone.get(i).getCrown();

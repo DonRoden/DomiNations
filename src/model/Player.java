@@ -89,7 +89,7 @@ public class Player {
 		if (board[x1][y1] == vide && board[x2][y2] == vide) {
 			// rectangle
 			if (isDomino(x1,y1,x2,y2)) {
-				// AÂ cote du chateau ou aÂ cote d'un meme type
+				// A cote du chateau ou a cote d'un meme type
 				if (   board[x1-1][y1] == chateau || board[x1+1][y1] == chateau
 					|| board[x2-1][y2] == chateau || board[x2+1][y2] == chateau
 					|| board[x1][y1+1] == chateau || board[x2][y2-1] == chateau
