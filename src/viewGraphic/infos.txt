@@ -1,0 +1,22 @@
+Bienvenue, voici les règles du jeu :
+
+Tout d'abord, Domi’Nations est un jeu de plateau conçu pour 2 à 4 joueurs. Au cours d’une
+partie, chaque joueur doit construire un royaume de taille 5 × 5 en utilisant des
+dominos. Ces dominos présentent tous deux portions de terrain (qui peuvent
+être identiques) sur lesquelles peuvent se trouver de zéro à trois couronnes. Un
+exemple de domino (ou tuile).
+
+Le royaume se construit en piochant 1 puis plaçant les dominos les uns à
+côté des autres. Pour placer un domino, il faut qu’au moins un de ses terrains
+soit adjacent à un terrain de même type. La connexion doit obligatoirement
+se faire horizontalement ou verticalement, et les connexions en diagonales sont
+interdites.
+
+Lorsque tous les dominos ont été piochés, le joueur ayant le plus haut score a
+gagné.
+Chaque domaine rapporte n = nbCases × nbCouronnes, où :
+— nbCases correspond au nombre de cases formant le domaine,
+— nbCouronnes correspond au nombre de couronnes présentes sur le
+domaine.
+Le score final correspond à la somme des points obtenus sur chaque domaine.
+
