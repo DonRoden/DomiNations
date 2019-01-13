@@ -188,8 +188,9 @@ public class Game extends Parent {
 										chooseDomino(nbOrder, Model.lastTurn);
 									}
 									else {
+										rec.setOpacity(0.3);
 										rec.setVisible(false);
-										clickableBoard(grid, idPlayer);
+										clickableBoard(grid, nbOrder);
 									}
 								}
 							});
